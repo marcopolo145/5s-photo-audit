@@ -83,16 +83,15 @@
   if (!C.GOOGLE_LOGIN) gbtn.classList.add("hid");
   sb.auth.getSession().then(function (r) { paint(r.data.session); });
   sb.auth.onAuthStateChange(function (ev, s) { paint(s); if (s && location.hash.indexOf("access_token") > -1) history.replaceState(null, "", location.pathname); });
-  var back = location.origin + location.pathname;
+  var pw = $("apw");
   btn.onclick = async function () {
     var e = em.value.trim();
-    if (!/^\S+@\S+\.\S+$/.test(e)) { note("Enter a valid email.", true); return; }
-    btn.disabled = true; note("Sending…");
-    var r = await sb.auth.signInWithOtp({ email: e, options: { emailRedirectTo: back } });
+    if (!e || !pw.value) { note("Enter your email and password.", true); return; }
+    btn.disabled = true; note("Signing in\u2026");
+    var r = await sb.auth.signInWithPassword({ email: e, password: pw.value });
     btn.disabled = false;
-    if (r.error) note(r.error.message, true); else note("Check your email and tap the link. You stay signed in on this device.");
+    if (r.error) note("Wrong email or password.", true); else { pw.value = ""; note(""); }
   };
-  em.onkeydown = function (e) { if (e.key === "Enter") btn.onclick(); };
-  gbtn.onclick = function () { sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: back } }); };
+  em.onkeydown = pw.onkeydown = function (e) { if (e.key === "Enter") btn.onclick(); };
   so.onclick = function () { sb.auth.signOut(); };
 })();
