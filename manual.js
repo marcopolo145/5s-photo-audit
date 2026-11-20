@@ -168,7 +168,7 @@
     return true;
   }
   function review() {
-    var rs = [["Date", g("date").value], ["Auditor", sel("who") + (g("wname").value ? " – " + g("wname").value : "")],
+    var rs = [["Date", ddmmmyy(g("date").value)], ["Auditor", sel("who") + (g("wname").value ? " – " + g("wname").value : "")],
       ["Auditee", g("whom").value], ["Area", g("area").value + (sel("env") ? " (" + sel("env") + ")" : "")],
       ["Photos", g("th").children.length + " area photos"]];
     if (MAN) rs.push(["Points rated", rows().length - left() + " of " + rows().length]);
