@@ -26,6 +26,10 @@
     if (!r.ok || j.error) throw { code: j.code || "http_" + r.status, message: j.error || r.statusText };
     return j;
   }
+  async function sha256(t) {
+    var b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(t));
+    return Array.from(new Uint8Array(b)).map(function (x) { return x.toString(16).padStart(2, "0"); }).join("");
+  }
   function toB64(b) {
     return new Promise(function (ok, no) {
       if (typeof b === "string") { ok(b.replace(/^data:[^,]*,/, "")); return; }
@@ -52,7 +56,7 @@
         jobs.push({ s: s, first: c === 0, prompt: head + "FOCUS: this request covers ONLY the " + SNAME[s] + " indicators listed here. Give no other entries.\n" +
           "INDICATOR LIBRARY (only these; exactly one entry each):\n" + title + "\n" + chunk.join("\n") + "\n" +
           'Return ONLY JSON: {"why":"1-2 short sentences on what drove the points","evidence_level":n,"evidence_note":"...","summary":"one short sentence about this S","items":[{"id":"indicator ID","p":0-10 or null,"ph":photo number or 0,"o":"what you see, max 8 words"}],"actions":[{"s":' + s + ',"action":"specific corrective action","priority":"High|Medium|Low","minutes":n,"people":n,"ref":"indicator ID(s)"}],"photo_feedback":["retake or missing-view advice"]}\n' +
-          "Give 1-3 actions for the lowest-scoring indicators here, with realistic minutes for one person and the number of people." });
+          "Give 1-3 actions for the lowest-scoring indicators here, with realistic minutes for one person and the number of people. Do not mention photo numbers in photo_feedback." });
       }
     });
     var res = await api({ action: "ai_multi", prompts: jobs.map(function (j) { return j.prompt; }), images: im });
@@ -82,7 +86,14 @@
         limits: async function () { return { images: true }; },
         json: async function (p, o) {
           var im = await Promise.all(((o && o.images) || []).map(toB64));
-          if (/Assess ONLY/.test(p) && p.indexOf("INDICATOR LIBRARY") > -1) return scoreInParts(p, im);
+          if (/Assess ONLY/.test(p) && p.indexOf("INDICATOR LIBRARY") > -1) {
+            /* the order the photos were added in must not change the score: send them sorted by content, then map photo numbers back */
+            var hs = await Promise.all(im.map(sha256));
+            var order = im.map(function (_, i) { return i; }).sort(function (x, y) { return hs[x] < hs[y] ? -1 : hs[x] > hs[y] ? 1 : 0; });
+            var out = await scoreInParts(p, order.map(function (i) { return im[i]; }));
+            (out.items || []).forEach(function (it) { var n = +it.ph; if (n >= 1 && n <= order.length) it.ph = order[n - 1] + 1; });
+            return out;
+          }
           var r = await api({ action: "ai", prompt: p, images: im });
           return r.json;
         }

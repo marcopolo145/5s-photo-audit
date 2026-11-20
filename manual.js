@@ -5,13 +5,22 @@
   var C = window.APP_CONFIG || {};
   var MAN = !!C.MANUAL_SCORING;
   function g(i) { return document.getElementById(i); }
-  var KEYS = MAN ? ["s1", "s2", "sr", "s3", "s4", "res"] : ["s1", "s2", "s3", "s4", "res"];
+  var KEYS = MAN ? ["s1", "s2", "sr", "s4", "res"] : ["s1", "s2", "s4", "res"];
   var LBL = { s1: "Details", s2: "Photos", sr: "Rate", s3: "Legend", s4: "Submit", res: "Result" };
   var PTS = [["na", "N/A", null], ["poor", "Poor", 2], ["fair", "Fair", 5], ["good", "Good", 8], ["great", "Great", 10]];
   var VERB = { 1: "Remove or clear", 2: "Set a fixed place or label for", 3: "Clean and keep clean" };
   var MIN = { 1: [30, 15], 2: [45, 20], 3: [30, 15] }; /* minutes for one person: [Poor, Fair] */
   var RATE = {}, rtab = 1, step = 0, busy = false, msg = g("msg");
 
+  /* the Master Legend and rack questions sit under the photos, on the same screen */
+  (function () {
+    var s2 = g("s2"), s3 = g("s3"), h = document.createElement("h3");
+    h.className = "subh"; h.textContent = "Master Legend and Rack List";
+    var title = s3.querySelector("h2"); if (title) title.remove();
+    s2.appendChild(h);
+    while (s3.firstChild) s2.appendChild(s3.firstChild);
+    s3.remove();
+  })();
   function say(t) { msg.innerHTML = t ? '<span class="err">' + t + "</span>" : ""; }
   function rows() { return ids(envKey()); }
   function lblOf(k) { for (var i = 0; i < PTS.length; i++) if (PTS[i][0] === k) return PTS[i][1]; return ""; }
@@ -130,17 +139,19 @@
   });
   var MSG = {
     s1: function () { return "Fill all * fields."; },
-    s2: function () { return "Add 4 or 5 photos."; },
+    s2: function () {
+      return !photosOk() ? "Add 4 or 5 photos." : !g("legsel").value ? "Answer question 1." : !legOk() ? "Add the Master Legend photo." :
+        !g("binsel").value ? "Answer question 2." : !binOk() ? "Add 2 photos at the rack or bin." : "Answer the 3 questions.";
+    },
     sr: function () {
       var f = rows().filter(function (x) { return !RATE[x.id]; })[0]; if (f) rtab = f.s;
       return "Rate all points. " + left() + " left.";
-    },
-    s3: function () { return !g("legsel").value ? "Answer question 1." : !legOk() ? "Add the Master Legend photo." : !g("binsel").value ? "Answer question 2." : !binOk() ? "Add 2 photos at the rack or bin." : "Answer the 3 questions."; }
+    }
   };
   function okKey(k) {
     switch (k) {
-      case "s1": return !!ok1(); case "s2": return photosOk(); case "sr": return ratedAll();
-      case "s3": return legOk() && binOk() && !!qOk(); default: return resShown();
+      case "s1": return !!ok1(); case "s2": return photosOk() && legOk() && binOk() && !!qOk(); case "sr": return ratedAll();
+      default: return resShown();
     }
   }
   function guard(to) {
@@ -169,11 +180,11 @@
   }
   function view(i) {
     step = i; var k = KEYS[i];
-    ["s1", "s2", "sr", "s3", "s4"].forEach(function (p) { var el = g(p); if (el) el.classList.toggle("cur", p === k); });
+    ["s1", "s2", "sr", "s4"].forEach(function (p) { var el = g(p); if (el) el.classList.toggle("cur", p === k); });
     g("res").style.display = k === "res" ? "" : "none";
     if (k !== "res") g("mgr").classList.add("hid");
     if (k === "sr") renderRate();
-    if (k === "s3") d4q();
+    if (k === "s2") d4q();
     if (k === "s4") review();
     g("bk").classList.toggle("hid", i === 0); g("bk").textContent = k === "res" ? "Edit" : "Back";
     g("nx").classList.toggle("hid", k === "s4" || k === "res");
@@ -201,7 +212,7 @@
   });
 
   /* Submit: the result opens as soon as scoring is done; saving to Sheet and Drive continues with a visible banner. */
-  var orig = g("go").onclick, shown = false, t0 = 0, tick = null;
+  var orig = g("go").onclick, shown = false, celebrated = false, t0 = 0, tick = null;
   function bar(cls, html) { var s = g("savebar"); s.className = "savebar" + (cls ? " " + cls : ""); s.innerHTML = html; }
   function startProg() {
     t0 = Date.now(); g("prog").classList.remove("hid");
@@ -218,7 +229,7 @@
     if (!busy && !shown) return;
     var t = g("dm").textContent || "", bad = !!g("dm").querySelector(".err");
     if (bad) bar("bad", t);
-    else if (/Saved to the Google Sheet/.test(t)) bar("ok", "\u2713 Submitted. " + g("dm").innerHTML);
+    else if (/Saved to the Google Sheet/.test(t)) { bar("ok", "\u2713 Submitted. " + g("dm").innerHTML); if (!celebrated) { celebrated = true; setTimeout(confetti, 150); } }
     else bar("", "Saving to the Google Sheet and the 5S Folder\u2026 please keep this page open. " + (window.__docNo ? "Document No: " + esc(window.__docNo) + "." : ""));
   }
   function early() {
@@ -230,7 +241,7 @@
   g("go").onclick = async function () {
     if (!guard(KEYS.indexOf("s4"))) return;
     if (window.prefetchDoc) window.prefetchDoc();
-    busy = true; shown = false; g("bk").disabled = true; g("nw").disabled = true; g("go").disabled = true; g("go").textContent = "Submitting\u2026";
+    busy = true; shown = false; celebrated = false; g("bk").disabled = true; g("nw").disabled = true; g("go").disabled = true; g("go").textContent = "Submitting\u2026";
     startProg();
     try { await orig.call(this); } finally {
       busy = false; g("bk").disabled = false; g("nw").disabled = false; g("go").disabled = false; g("go").textContent = "Submit"; stopProg();
@@ -238,16 +249,15 @@
     if (resShown()) {
       if (!shown) { shown = true; view(KEYS.length - 1); }
       mirrorSave();
-      if (/Saved to the Google Sheet/.test(g("dm").textContent)) confetti();
     }
   };
   function confetti() {
-    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var soft = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
     var c = document.createElement("canvas");
     c.style.cssText = "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50";
     c.width = innerWidth; c.height = innerHeight; document.body.appendChild(c);
     var x = c.getContext("2d"), col = ["#1f3fe0", "#14143c", "#e5283a", "#12874a", "#f2b01e", "#6c8cff"], P = [];
-    for (var i = 0; i < 140; i++) P.push({ x: innerWidth / 2 + (Math.random() - .5) * 160, y: innerHeight * .75, vx: (Math.random() - .5) * 16, vy: -8 - Math.random() * 13, w: 6 + Math.random() * 7, h: 4 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: col[i % col.length] });
+    for (var i = 0; i < (soft ? 60 : 140); i++) P.push({ x: innerWidth / 2 + (Math.random() - .5) * 160, y: innerHeight * .75, vx: (Math.random() - .5) * 16, vy: -8 - Math.random() * 13, w: 6 + Math.random() * 7, h: 4 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: col[i % col.length] });
     var t0 = performance.now();
     (function f(t) {
       var e = t - t0; x.clearRect(0, 0, c.width, c.height);
