@@ -66,6 +66,12 @@ details{margin-top:14px}summary{cursor:pointer;color:var(--ac);font-weight:600;f
 .steps button.ok{color:var(--ok);border-color:#bfe5cf;background:#f0faf4}
 .steps button:hover{filter:none}
 .rv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:14px;margin-top:6px}.rv b{color:var(--mut);font-weight:600}.rv span{word-break:break-word}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.tb{background:#fff;color:var(--mut);border:1px solid var(--bd);padding:8px 12px;font-size:13px}.tb.on{color:var(--ac);border-color:var(--ac);background:var(--ac2)}.tb i{font-style:normal;opacity:.7;margin-left:4px}
+.ir{padding:12px 0;border-bottom:1px solid var(--bd)}.ir .it b{display:block;font-size:14.5px}.ir .it span{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+.seg{display:flex;gap:6px;margin-top:8px}.seg button{flex:1;padding:9px 4px;font-size:13px;background:#fff;color:var(--mut);border:1px solid var(--bd)}
+.seg button.sel{color:#fff;border-color:transparent}.seg .na.sel{background:#8a93a8}.seg .poor.sel{background:var(--bad)}.seg .fair.sel{background:var(--mid)}.seg .good.sel{background:var(--ok)}.seg .great.sel{background:#0b5d33}
+.qa{display:grid;grid-template-columns:1fr 130px;gap:8px 12px;align-items:center}.qa label{margin:0;font-size:13.5px;color:var(--tx);font-weight:500}
+@media(max-width:560px){.qa{grid-template-columns:1fr}}
 .pg{display:none}.pg.cur{display:block}
 .act .in{justify-content:space-between}.act #msg{flex:1;text-align:center}
 .act button{min-width:110px}
@@ -76,7 +82,7 @@ details{margin-top:14px}summary{cursor:pointer;color:var(--ac);font-weight:600;f
 <div class="w">
 <h1>5S Photo Audit</h1>
 <p class="lead">Take 4 or 5 photos. Get your score.</p>
-<div class="steps" id="steps"><button type="button" id="st1">Details</button><button type="button" id="st2">Photos</button><button type="button" id="st3">4S</button><button type="button" id="st4">Submit</button><button type="button" id="st5">Result</button></div>
+<div class="steps" id="steps"></div>
 
 <div class="c pg cur" id="s1"><h2><span class="n" id="n1">1</span>Details <button class="o" id="mgrbtn" style="margin-left:auto;padding:6px 12px;font-size:13px">Edit lists</button></h2><p class="s">Fields with * are required.</p><div class="g">
 <div><label>Date *</label><input type="date" id="date"></div>
@@ -100,19 +106,29 @@ details{margin-top:14px}summary{cursor:pointer;color:var(--ac);font-weight:600;f
 <div class="drop"><b>Add 4 or 5 photos</b><span class="note">Use camera or gallery</span><div style="margin-top:12px"><input type="file" id="file" accept="image/*" multiple class="hid"><button id="pick">+ Add photos</button></div></div>
 <div class="th" id="th"></div></div>
 
+<div class="c pg" id="sr"><h2><span class="n">3</span>Rate the Area <span class="pill2" id="rcnt" style="margin-left:auto"></span></h2>
+<p class="s">Look at your photos. Rate each point.</p>
+<p class="note"><b>Poor</b> = clear problem. <b>Fair</b> = partly done. <b>Good</b> = fine. <b>Great</b> = excellent. <b>N/A</b> = cannot see it. N/A is left out of the score.</p>
+<div class="tabs" id="rtabs"></div><div id="rlist"></div>
+<div style="margin-top:12px"><button type="button" class="o" id="rall">Mark the rest of this tab Good</button></div>
+<div style="margin-top:14px"><label>Note (optional)</label><textarea id="rnote" rows="2"></textarea></div></div>
 <div class="c pg" id="s3"><h2><span class="n" id="n3">3</span>4S check</h2>
 <p class="s"><b>A.</b> Photo of the Master Legend (office).<br><b>B.</b> Go to one rack / bin. Take 2 photos: the list and the bin.<br>Not there? Choose <b>Not Available</b>.</p>
 <div class="q"><div><div class="t">A &middot; Master Legend</div><select id="legsel"><option value="y">Yes, I will take photo</option><option value="n">Not Available</option></select><div id="legbox" style="margin-top:10px"><button class="o" id="legbtn">+ Take photo</button><input type="file" id="legf" accept="image/*" class="hid"><div class="th" id="legth"></div></div></div>
 <div><div class="t">B &middot; Rack / bin list</div><select id="binsel"><option value="y">Yes, I will take photo</option><option value="n">Not Available</option></select><div id="binbox" style="margin-top:10px"><button class="o" id="binbtn">+ Take 2 photos</button> <span class="note" id="bcnt"></span><input type="file" id="binf" accept="image/*" multiple class="hid"><div class="th" id="binth"></div></div></div></div>
+<div id="s4q" class="hid" style="margin-top:14px"><div class="t" style="font-weight:700;margin-bottom:8px">Check at the rack / bin</div><div class="qa">
+<label>Do the item name and rack / bin number on the list match the Master Legend?</label><select id="q4m"><option value="">Choose…</option><option value="y">Yes</option><option value="n">No</option></select>
+<label>Is the item really kept in that rack / bin?</label><select id="q4s"><option value="">Choose…</option><option value="y">Yes</option><option value="n">No</option></select>
+<label>Are the legend and the list clean, easy to see and well kept?</label><select id="q4q"><option value="">Choose…</option><option value="y">Yes</option><option value="n">No</option></select></div></div>
 <details><summary>Item checked (optional)</summary><div class="g" style="margin-top:12px"><div><label>Item name</label><input id="s4item"></div><div><label>Rack no.</label><input id="s4rack"></div><div><label>Bin no.</label><input id="s4bin"></div></div></details>
 <p class="note" style="margin-top:12px">Keep the text clear and readable.</p></div>
 
-<div class="c pg" id="s4"><h2><span class="n" id="n4">4</span>Check and Submit</h2><p class="s">Review. Then press Submit.</p><div id="rv"></div><div class="th" id="rvt"></div><p class="note" style="margin-top:12px">On Submit: photos are scored, the row goes to the Google Sheet and the PDF goes to the 5S Folder. This takes 1 to 2 minutes.</p></div>
+<div class="c pg" id="s4"><h2><span class="n" id="n4">4</span>Check and Submit</h2><p class="s">Review. Then press Submit.</p><div id="rv"></div><div class="th" id="rvt"></div><p class="note" style="margin-top:12px">On Submit: the score is worked out, the row goes to the Google Sheet and the PDF goes to the 5S Folder.</p></div>
 <div id="res" class="hid">
 <div class="c"><h2>Submitted! Your Score</h2><p class="s">Each S is out of 1. Total is out of 4.</p><div class="sc" id="scores"></div><p id="sum" style="margin-top:14px"></p><p class="note" id="evid"></p></div>
 <div class="c"><h2>What to do</h2><div class="ov" style="margin-top:10px"><table id="at"></table></div><p id="tt" style="margin-top:10px;font-weight:700"></p><p class="note">Time is an estimate for one person.</p></div>
 <div class="c"><h2>Saved</h2><p class="s">The row is added to the Google Sheet and the PDF to the 5S Folder, automatically.</p><button id="pdf">Download PDF</button> <button id="xls" class="o hid">Try saving again</button> <span id="dm" class="note"></span>
-<p class="note" style="margin-top:12px">AI checks photos only. A person should review safety points.</p></div>
+<p class="note" style="margin-top:12px">Scores are the auditor’s ratings. Review safety points with care.</p></div>
 <div class="c"><h2>How we scored</h2><div id="why" style="margin-top:10px"></div></div>
 <div class="c"><h2>All points</h2><p class="s">Each point is out of 10.</p><div class="ov"><table id="ft"></table></div></div>
 <div class="c"><h2>Photo notes</h2><div id="pq" style="margin-top:8px"></div></div>
@@ -214,7 +230,7 @@ $("pdf").onclick=function(){
  y+=2;T("Estimated total time to close all actions: "+mins(R.total_minutes||0),10,1);T("Estimates assume one trained person per action and exclude procurement or approvals.",8.5,0,[100,110,120]);
  if(R.photo_feedback&&R.photo_feedback.length){y+=2;T("Photo quality and missing views",12,1);R.photo_feedback.forEach(function(x){T("• "+x,9.5)})}
  d.addPage();y=M;T("Photographs assessed",12,1);var x=M,iw=56,ih=42;photos.forEach(function(p,i){if(x+iw>W-M){x=M;y+=ih+9}pg(ih+9);d.addImage(p.url,"JPEG",x,y,iw,ih);d.setFontSize(8);d.setTextColor(60);d.text("Photo "+(i+1),x,y+ih+4);x+=iw+4});y+=ih+14;
- T("Generated by AI from photographs only. Items outside the camera view were not scored. A human auditor should confirm uncertain observations and all safety-related findings.",8.5,0,[100,110,120]);
+ T((window.APP_CONFIG&&APP_CONFIG.MANUAL_SCORING?"Rated by the auditor from the photographs.":"Generated by AI from photographs only.")+" Items outside the camera view were not scored. A human auditor should confirm uncertain observations and all safety-related findings.",8.5,0,[100,110,120]);
  save(fname("pdf"),d.output("blob"),"PDF")};
 /* ---- Dynamic lists ---- */
 var DEF={who:["Self-audit","Area Supervisor","Department Head","Quality Manager","EHS / Safety Officer","Internal 5S Auditor","Management","External Auditor"],aud:[],auditee:[],area:[],types:[{n:"Manufacturing plant",b:"PL"},{n:"Office",b:"OF"},{n:"Store room",b:"ST"},{n:"Laptop / workstation",b:"LT"},{n:"Other (general criteria)",b:"XX"}]};
@@ -267,7 +283,7 @@ $("go").onclick=async function(){
  var e=envKey();if(!$("date").value||!$("who").value||!$("whom").value.trim()||!$("area").value.trim()){$("msg").innerHTML='<span class="err">Fill all * fields.</span>';return}
  if(photos.length<4){$("msg").innerHTML='<span class="err">Add 4 or 5 photos.</span>';return}
  var sample=await claude.use("sample");if(!sample){$("msg").innerHTML='<span class="err">AI assessment is not available in this view.</span>';return}
- $("go").disabled=true;$("msg").textContent="Checking photos\u2026 1 to 2 minutes.";
+ $("go").disabled=true;$("msg").textContent="Saving\u2026";
  var p="You are an expert 5S auditor. Write ALL text in very simple English (reader knows English as a second language): short sentences, common words, no jargon, max 12 words per sentence. Assess ONLY Sort (1S), Set in Order (2S) and Shine (3S) from the attached "+photos.length+" photographs (numbered 1 to "+photos.length+" in order). Area type: "+envName()+" (use the "+LIB[e].n+" criteria). Area: "+$("area").value+". Auditee: "+$("whom").value+". Extra context: "+($("ctx").value||"none")+".\n"+
  "TASK: give EVERY indicator below integer points from 0 to 10 based on visible evidence. 0-3 = poor / not established (clear problem evident); 4-7 = partially established (mostly done but inconsistent, exceptions remain); 8-10 = visibly established (no significant issue, consistent). Use the full range and be consistent and strict: reserve 9-10 for clearly excellent evidence. For the Sort indicators, points reflect how free the area is of that kind of unnecessary item; for Set in Order, how well the location, label or arrangement is established; for Shine, how clean that item is.\n"+
  "RULES: If an indicator cannot be judged from the photos or does not apply, use p null (it is then excluded from the average); items outside the camera view are never failures. Do not double-count one underlying issue across indicators. Protective oil film, necessary coolant or unavoidable process residue is not a failure if controlled and contained. Never recommend deleting a file just because it looks old; flag it for review. A tidy look does not prove stock accuracy or cybersecurity. If photos are unsuitable (wrong area, blurry, dark, too few views), lower the evidence level and say so. Photo evidence level (1-3) is separate from the points.\n"+
@@ -317,7 +333,7 @@ $("pdf").onclick=function(){
  y+=2;T("Estimated total time to close all actions: "+mins(R.total_minutes||0),10,1);T("Estimates assume one trained person per action and exclude procurement or approvals.",8.5,0,[100,110,120]);
  if(R.photo_feedback&&R.photo_feedback.length){y+=2;T("Photo quality and missing views",12,1);R.photo_feedback.forEach(function(x){T("- "+x,9.5)})}
  y+=3;
- T("Generated by AI from photographs only. Items outside the camera view were not scored. A human auditor should confirm uncertain observations and all safety-related findings.",8.5,0,[100,110,120]);
+ T((window.APP_CONFIG&&APP_CONFIG.MANUAL_SCORING?"Rated by the auditor from the photographs.":"Generated by AI from photographs only.")+" Items outside the camera view were not scored. A human auditor should confirm uncertain observations and all safety-related findings.",8.5,0,[100,110,120]);
  PDFBLOB=d.output("blob");if(!NOSAVE)save(fname("pdf"),PDFBLOB,"PDF")};
 /* ---- v4: 4S Systematize (Master Legend + rack/bin list), overall max 20 ---- */
 var S4={leg:null,bin:[]};
@@ -432,78 +448,7 @@ var go6=$("go").onclick;
 $("go").onclick=async function(){$("msg").textContent="Starting…";try{await go6()}catch(x){$("msg").innerHTML='<span class="err">Error: '+esc((x&&(x.code||x.message))||"unknown")+'</span>';$("go").disabled=false}};
 initLists();
 </script>
-<script>
-(function(){
- function g(i){return document.getElementById(i)}
- var step=1,pages=["s1","s2","s3","s4"],msg=g("msg"),busy=false;
- function say(t){msg.innerHTML=t?'<span class="err">'+t+'</span>':""}
- function ok1(){return g("date").value&&g("who").value&&g("whom").value.trim()&&g("area").value.trim()}
- function photosOk(){return g("th").children.length>=4}
- function legOk(){return g("legsel").value==="n"||g("legth").children.length>0}
- function binOk(){return g("binsel").value==="n"||g("binth").children.length>=2}
- function resShown(){return !g("res").classList.contains("hid")}
- function sel(i){var e=g(i);return e.options&&e.selectedIndex>=0?e.options[e.selectedIndex].text:""}
- function esc2(t){return String(t==null?"":t).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
- function review(){
-  var rows=[["Date",g("date").value],["Auditor",sel("who")+(g("wname").value?" \u2013 "+g("wname").value:"")],["Auditee",g("whom").value],["Area",g("area").value+(sel("env")?" ("+sel("env")+")":"")],
-   ["Photos",g("th").children.length+" area photos"],
-   ["Master Legend",g("legsel").value==="n"?"Not Available":(g("legth").children.length?"Photo added":"Missing")],
-   ["Rack / bin list",g("binsel").value==="n"?"Not Available":(g("binth").children.length+" photos")]];
-  g("rv").className="rv";g("rv").innerHTML=rows.map(function(r){return "<b>"+r[0]+"</b><span>"+esc2(r[1])+"</span>"}).join("");
-  g("rvt").innerHTML=[].map.call(g("th").querySelectorAll("img"),function(im){return '<div><img src="'+im.src+'" alt=""></div>'}).join("")
- }
- function view(n){
-  step=n;
-  pages.forEach(function(p,i){g(p).classList.toggle("cur",n===i+1)});
-  g("res").style.display=n===5?"":"none";
-  if(n!==5)g("mgr").classList.add("hid");
-  if(n===4)review();
-  g("bk").classList.toggle("hid",n===1);g("bk").textContent=n===5?"Edit":"Back";
-  g("nx").classList.toggle("hid",n>=4);g("go").classList.toggle("hid",n!==4);g("nw").classList.toggle("hid",n!==5);
-  say("");paint();window.scrollTo({top:0,behavior:"smooth"})
- }
- function paint(){
-  var d=[!!ok1(),photosOk(),legOk()&&binOk(),resShown(),resShown()];
-  for(var i=1;i<=5;i++){var b=g("st"+i);b.className=i===step?"on":(d[i-1]?"ok":"");var n=g("n"+i);if(n){n.className="n"+(d[i-1]?" done":"");n.textContent=d[i-1]?"\u2713":i}}
-  g("xls").classList.toggle("hid",!(g("dm").querySelector(".err")));
- }
- function guard(to){
-  if(to>1&&!ok1()){say("Fill all * fields.");return false}
-  if(to>2&&!photosOk()){say("Add 4 or 5 photos.");return false}
-  if(to>3&&!legOk()){say("Add the Master Legend photo, or choose Not Available.");return false}
-  if(to>3&&!binOk()){say("Add 2 rack / bin photos, or choose Not Available.");return false}
-  return true}
- g("nx").onclick=function(){if(guard(step+1))view(step+1)};
- g("bk").onclick=function(){if(busy)return;view(step===5?1:step-1)};
- g("nw").onclick=function(){if(confirm("Start a new audit? This clears the page."))location.reload()};
- [1,2,3,4,5].forEach(function(i){g("st"+i).onclick=function(){
-  if(busy)return;
-  if(i===5){if(resShown())view(5);else say("Submit first.");return}
-  if(guard(i))view(i)}});
- /* Submit: score, auto-save to Sheet + Drive, then show the result */
- var orig=g("go").onclick;
- g("go").onclick=async function(){
-  if(!guard(4))return;
-  busy=true;g("bk").disabled=true;g("go").textContent="Submitting\u2026";
-  try{await orig.call(this)}finally{busy=false;g("bk").disabled=false;g("go").textContent="Submit"}
-  if(resShown()){view(5);confetti()}};
- function confetti(){
-  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
-  var c=document.createElement("canvas");c.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50";
-  c.width=innerWidth;c.height=innerHeight;document.body.appendChild(c);var x=c.getContext("2d"),col=["#1f3fe0","#14143c","#e5283a","#12874a","#f2b01e","#6c8cff"],P=[];
-  for(var i=0;i<140;i++)P.push({x:innerWidth/2+(Math.random()-.5)*160,y:innerHeight*.75,vx:(Math.random()-.5)*16,vy:-8-Math.random()*13,w:6+Math.random()*7,h:4+Math.random()*6,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:col[i%col.length]});
-  var t0=performance.now();
-  (function f(t){var e=t-t0;x.clearRect(0,0,c.width,c.height);
-   P.forEach(function(p){p.vy+=.32;p.vx*=.992;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.globalAlpha=Math.max(0,1-e/3200);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});
-   if(e<3200)requestAnimationFrame(f);else c.remove()})(t0)}
- /* keep results hidden until submit has finished */
- new MutationObserver(function(){paint()}).observe(g("res"),{attributes:true,attributeFilter:["class"]});
- new MutationObserver(function(){paint()}).observe(g("dm"),{childList:true,subtree:true,characterData:true});
- document.addEventListener("input",paint);document.addEventListener("change",paint);document.addEventListener("click",function(){setTimeout(paint,60)});
- setInterval(paint,800);
- var c=g("cnt");function fc(){var m=c.textContent.match(/^(\d+)/);if(m&&!/ of 4/.test(c.textContent))c.textContent=m[1]+" of 4\u20135"}new MutationObserver(fc).observe(c,{childList:true});fc();
- view(1);
-})();
-</script>
+<script src="hints.js"></script>
+<script src="manual.js"></script>
 
 </body></html>
