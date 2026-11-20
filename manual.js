@@ -204,6 +204,7 @@
   var orig = g("go").onclick;
   g("go").onclick = async function () {
     if (!guard(KEYS.indexOf("s4"))) return;
+    if (window.prefetchDoc) window.prefetchDoc();
     busy = true; g("bk").disabled = true; g("go").textContent = "Submitting…";
     try { await orig.call(this); } finally { busy = false; g("bk").disabled = false; g("go").textContent = "Submit"; }
     if (resShown()) { view(KEYS.length - 1); confetti(); }
