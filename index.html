@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>5S Photo Audit</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--tx:#14183c;--mut:#667089;--bd:#e2e6f0;--ac:#1f3fe0;--ac2:#eef1fe;--navy:#14143c;--bad:#e5283a;--mid:#d9840a;--ok:#12874a;color-scheme:light;box-sizing:border-box}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,sans-serif;-webkit-font-smoothing:antialiased}
+.top{position:sticky;top:0;z-index:20;background:#fffffff2;backdrop-filter:blur(8px);border-bottom:1px solid var(--bd)}
+.top .in{max-width:880px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top img{height:26px;display:block}.top span{font-size:13px;color:var(--mut);font-weight:600}
+.w{max-width:880px;margin:0 auto;padding:20px 16px 110px}
+h1{font-size:28px;line-height:1.15;margin:6px 0 6px;letter-spacing:-.02em}
+h2{font-size:17px;margin:0;display:flex;align-items:center;gap:10px}
+h2 .n{width:26px;height:26px;border-radius:50%;background:var(--ac);color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+h2 .n.done{background:var(--ok)}
+p.s{color:var(--mut);margin:6px 0 14px}
+.lead{color:var(--mut);margin:0 0 16px;max-width:620px}
+.steps{display:flex;gap:6px;margin:0 0 18px;flex-wrap:wrap}
+.steps a{flex:1;min-width:110px;text-decoration:none;color:var(--mut);font-size:13px;font-weight:600;padding:8px 12px;border-radius:99px;background:#fff;border:1px solid var(--bd);text-align:center}
+.steps a.on{color:var(--ac);border-color:var(--ac);background:var(--ac2)}
+.steps a.ok{color:var(--ok);border-color:#bfe5cf;background:#f0faf4}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 1px 2px #14143c0a,0 6px 20px #14143c08}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+label{display:block;font-size:12.5px;color:var(--mut);margin-bottom:4px;font-weight:600}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--bd);border-radius:10px;background:#fff;color:var(--tx);font:inherit;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 3px #1f3fe022}
+button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 18px;font:inherit;font-weight:600;cursor:pointer;transition:filter .15s,transform .05s}
+button:hover{filter:brightness(1.08)}button:active{transform:translateY(1px)}
+button.o{background:#fff;color:var(--ac);border:1px solid #c9d2fb}button.o:hover{background:var(--ac2)}
+button:disabled{opacity:.5;cursor:not-allowed}
+details{margin-top:14px}summary{cursor:pointer;color:var(--ac);font-weight:600;font-size:13.5px;list-style:none}summary::-webkit-details-marker{display:none}summary:before{content:"+ ";font-weight:700}details[open]>summary:before{content:"\2212\0020"}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px}
+.sh{border:1px solid var(--bd);border-radius:12px;padding:10px;font-size:12.5px;background:var(--ac2);line-height:1.4}
+.drop{border:2px dashed #c9d2fb;border-radius:14px;background:#fafbff;padding:22px;text-align:center;margin-top:14px}
+.drop b{display:block;margin-bottom:4px}
+.th{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.th div{position:relative}.th img{width:104px;height:80px;object-fit:cover;border-radius:10px;border:1px solid var(--bd)}
+.th b{position:absolute;top:4px;left:4px;background:#14143ccc;color:#fff;border-radius:6px;padding:0 6px;font-size:12px}
+.th i{position:absolute;top:4px;right:4px;background:#14143ccc;color:#fff;border-radius:6px;padding:0 6px;font-style:normal;cursor:pointer}
+.pill2{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12.5px;font-weight:600;background:var(--ac2);color:var(--ac)}
+.sc{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;text-align:center}
+.sc div{border:1px solid var(--bd);border-radius:14px;padding:14px 8px;background:#fff}
+.sc big{display:block;font-size:34px;line-height:1.1;font-weight:750;color:var(--navy);margin:2px 0}
+.sc small{display:block;color:var(--mut);font-size:12.5px}
+.sc .t{grid-column:1/-1;background:linear-gradient(135deg,#14143c,#1f3fe0);border:0}.sc .t big,.sc .t small{color:#fff}
+.ov{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:13px}th,td{border-bottom:1px solid var(--bd);padding:8px;text-align:left;vertical-align:top}th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.03em;background:#fafbff}
+.pill{padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid currentColor;white-space:nowrap}
+.Fail,.High{color:var(--bad)}.Partial,.Medium{color:var(--mid)}.Pass,.Low{color:var(--ok)}
+.hid{display:none}.chip{display:inline-flex;align-items:center;gap:6px;background:var(--ac2);border:1px solid var(--bd);border-radius:99px;padding:2px 6px 2px 10px;margin:3px 4px 3px 0;font-size:13px}.chip u{text-decoration:none;cursor:pointer;color:var(--bad);font-weight:700}
+.mr{display:flex;gap:6px;margin:6px 0}.mr input,.mr select{flex:1}.mr button{white-space:nowrap}
+.err{color:var(--bad);font-weight:600}.note{font-size:12.5px;color:var(--mut)}
+.act{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fffffff5;backdrop-filter:blur(8px);border-top:1px solid var(--bd);padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px))}
+.act .in{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:14px}
+.act button{padding:13px 26px;font-size:16px;white-space:nowrap}
+.act #msg{flex:1}
+.q{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.q>div{border:1px solid var(--bd);border-radius:14px;padding:14px}
+.q .t{font-weight:700;margin-bottom:8px}
+@media(max-width:560px){h1{font-size:24px}.c{padding:16px}.act button{width:100%}.act #msg{display:none}}
+.gate{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px}.gate.hid{display:none}
+.gbox{background:#fff;border:1px solid var(--bd);border-radius:18px;padding:28px;max-width:380px;width:100%;box-shadow:0 8px 30px #14143c14}.gbox img{height:30px;margin-bottom:16px;display:block}.gbox h1{font-size:24px;margin:0 0 6px}
+</style><style>
+.steps button{flex:1;min-width:80px;font-size:13px;font-weight:600;padding:9px 8px;border-radius:99px;background:#fff;border:1px solid var(--bd);color:var(--mut)}
+.steps button.on{color:var(--ac);border-color:var(--ac);background:var(--ac2)}
+.steps button.ok{color:var(--ok);border-color:#bfe5cf;background:#f0faf4}
+.steps button:hover{filter:none}
+.rv{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;font-size:14px;margin-top:6px}.rv b{color:var(--mut);font-weight:600}.rv span{word-break:break-word}
+.pg{display:none}.pg.cur{display:block}
+.act .in{justify-content:space-between}.act #msg{flex:1;text-align:center}
+.act button{min-width:110px}
+@media(max-width:560px){.act button{width:auto;flex:none;padding:13px 20px}.act #msg{display:block;font-size:12px}}
+</style></head><body>
+<div class="gate" id="auth"><div class="gbox"><img src="data:image/png;base64,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" alt="Marcopolo"><h1>Sign In</h1><p class="lead" style="margin-bottom:14px">Use your work email. Sign in once. This device stays signed in.</p><label>Email</label><input id="aem" type="email" autocomplete="email" placeholder="name@company.com"><button id="asend" style="width:100%;margin-top:12px">Send Login Link</button><button id="agoogle" class="o" style="width:100%;margin-top:8px">Continue with Google</button><p id="amsg" class="note" style="margin-top:12px"></p></div></div>
+<div class="top"><div class="in"><img src="data:image/png;base64,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" alt="Marcopolo"><span><span id="ue"></span><button id="so" class="o hid" style="padding:4px 10px;font-size:12px;margin-left:8px">Sign out</button></span></div></div>
+<div class="w">
+<h1>5S Photo Audit</h1>
+<p class="lead">Take 4 or 5 photos. Get your score.</p>
+<div class="steps" id="steps"><button type="button" id="st1">Details</button><button type="button" id="st2">Photos</button><button type="button" id="st3">4S</button><button type="button" id="st4">Submit</button><button type="button" id="st5">Result</button></div>
+
+<div class="c pg cur" id="s1"><h2><span class="n" id="n1">1</span>Details <button class="o" id="mgrbtn" style="margin-left:auto;padding:6px 12px;font-size:13px">Edit lists</button></h2><p class="s">Fields with * are required.</p><div class="g">
+<div><label>Date *</label><input type="date" id="date"></div>
+<div><label>Auditor type *</label><select id="who"></select></div>
+<div><label>Auditor name</label><input id="wname" list="dl_aud" autocomplete="off" placeholder="Pick or type"></div>
+<div><label>Auditee *</label><input id="whom" list="dl_auditee" autocomplete="off" placeholder="Pick or type"></div>
+<div><label>Area *</label><input id="area" list="dl_area" autocomplete="off" placeholder="Pick or type"></div>
+<div><label>Area type *</label><select id="env"></select></div>
+</div>
+<details><summary>More (optional)</summary><div class="g" style="margin-top:12px">
+<div><label>Site</label><input id="site"></div>
+<div><label>Shift</label><input id="shift" placeholder="General"></div>
+<div><label>Last score (out of 4)</label><input type="number" id="prev" min="0" max="4" step="0.01"></div>
+</div><div style="margin-top:12px"><label>Note</label><textarea id="ctx" rows="2"></textarea></div></details></div>
+
+<div class="c hid" id="mgr"></div><datalist id="dl_aud"></datalist><datalist id="dl_auditee"></datalist><datalist id="dl_area"></datalist>
+
+<div class="c pg" id="s2"><h2><span class="n" id="n2">2</span>Photos <span class="pill2" id="cnt" style="margin-left:auto"></span></h2><p class="s" id="gtxt"></p>
+<details open><summary>Photo guide</summary><div class="shots" id="guide"></div>
+<p class="note" style="margin-top:10px">Good light. No flash. Keep labels readable. Hide private data.</p></details>
+<div class="drop"><b>Add 4 or 5 photos</b><span class="note">Use camera or gallery</span><div style="margin-top:12px"><input type="file" id="file" accept="image/*" multiple class="hid"><button id="pick">+ Add photos</button></div></div>
+<div class="th" id="th"></div></div>
+
+<div class="c pg" id="s3"><h2><span class="n" id="n3">3</span>4S check</h2>
+<p class="s"><b>A.</b> Photo of the Master Legend (office).<br><b>B.</b> Go to one rack / bin. Take 2 photos: the list and the bin.<br>Not there? Choose <b>Not Available</b>.</p>
+<div class="q"><div><div class="t">A &middot; Master Legend</div><select id="legsel"><option value="y">Yes, I will take photo</option><option value="n">Not Available</option></select><div id="legbox" style="margin-top:10px"><button class="o" id="legbtn">+ Take photo</button><input type="file" id="legf" accept="image/*" class="hid"><div class="th" id="legth"></div></div></div>
+<div><div class="t">B &middot; Rack / bin list</div><select id="binsel"><option value="y">Yes, I will take photo</option><option value="n">Not Available</option></select><div id="binbox" style="margin-top:10px"><button class="o" id="binbtn">+ Take 2 photos</button> <span class="note" id="bcnt"></span><input type="file" id="binf" accept="image/*" multiple class="hid"><div class="th" id="binth"></div></div></div></div>
+<details><summary>Item checked (optional)</summary><div class="g" style="margin-top:12px"><div><label>Item name</label><input id="s4item"></div><div><label>Rack no.</label><input id="s4rack"></div><div><label>Bin no.</label><input id="s4bin"></div></div></details>
+<p class="note" style="margin-top:12px">Keep the text clear and readable.</p></div>
+
+<div class="c pg" id="s4"><h2><span class="n" id="n4">4</span>Check and Submit</h2><p class="s">Review. Then press Submit.</p><div id="rv"></div><div class="th" id="rvt"></div><p class="note" style="margin-top:12px">On Submit: photos are scored, the row goes to the Google Sheet and the PDF goes to the 5S Folder. This takes 1 to 2 minutes.</p></div>
+<div id="res" class="hid">
+<div class="c"><h2>Submitted! Your Score</h2><p class="s">Each S is out of 1. Total is out of 4.</p><div class="sc" id="scores"></div><p id="sum" style="margin-top:14px"></p><p class="note" id="evid"></p></div>
+<div class="c"><h2>What to do</h2><div class="ov" style="margin-top:10px"><table id="at"></table></div><p id="tt" style="margin-top:10px;font-weight:700"></p><p class="note">Time is an estimate for one person.</p></div>
+<div class="c"><h2>Saved</h2><p class="s">The row is added to the Google Sheet and the PDF to the 5S Folder, automatically.</p><button id="pdf">Download PDF</button> <button id="xls" class="o hid">Try saving again</button> <span id="dm" class="note"></span>
+<p class="note" style="margin-top:12px">AI checks photos only. A person should review safety points.</p></div>
+<div class="c"><h2>How we scored</h2><div id="why" style="margin-top:10px"></div></div>
+<div class="c"><h2>All points</h2><p class="s">Each point is out of 10.</p><div class="ov"><table id="ft"></table></div></div>
+<div class="c"><h2>Photo notes</h2><div id="pq" style="margin-top:8px"></div></div>
+</div>
+</div>
+<div class="act"><div class="in"><button class="o" id="bk">Back</button><span id="msg" class="note"></span><button id="nx">Next</button><button id="go" class="hid">Submit</button><button id="nw" class="o hid">New audit</button></div></div>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="runtime.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+var $=function(i){return document.getElementById(i)};
+var LIB={
+OF:{n:"Office",1:"Unnecessary papers;Obsolete documents;Excess stationery;Unused equipment;Broken items;Unused furniture;Unnecessary personal items;Empty containers;Waste accumulation;Unidentified objects;Duplicate supplies;Unused cables;Unnecessary printed material;Excess desk accessories;Unused storage",
+2:"Defined desk zones;Document arrangement;File identification;Cabinet identification;Drawer organisation;Stationery locations;Shared equipment locations;Cable routing;Charging locations;Visitor arrangement;Aisle accessibility;Storage labels;Noticeboard organisation;Common supplies;Personal storage;Ergonomic arrangement;Waste-bin placement;Emergency access",
+3:"Desk cleanliness;Monitor cleanliness;Keyboard cleanliness;Mouse cleanliness;Telephone cleanliness;Chair cleanliness;Floor cleanliness;Wall cleanliness;Glass cleanliness;Door cleanliness;Cabinet cleanliness;Shelf cleanliness;Printer cleanliness;Ceiling condition;Waste-bin hygiene;Food and beverage hygiene;Cable-area cleanliness;Common-area cleanliness"},
+PL:{n:"Manufacturing plant",1:"Unnecessary raw material;Excess WIP;Obsolete components;Scrap accumulation;Unidentified material;Broken tools;Redundant fixtures;Unused gauges;Unused machine accessories;Empty packaging;Unnecessary pallets;Abandoned containers;Redundant hoses and cables;Unused maintenance items;Unnecessary tools on machines;Excess consumables;Rejected parts mixed with good parts;Obsolete visual instructions;Unused temporary structures;Unnecessary items near walkways",
+2:"Machine identification;Floor demarcation;Workstation identification;Tool shadow boards;Tool identification;Raw material locations;WIP locations;Finished-goods locations;Rejection locations;Scrap segregation;Fixture and jig storage;Gauge storage;Maintenance-tool storage;Pallet locations;Trolley parking;Hose and cable routing;Walkway demarcation;Emergency equipment identification;Control-panel access;Electrical-panel access;Operating-instruction display;Machine status identification;Lubricant identification;Cleaning equipment locations;Material orientation;Rack identification;FIFO lanes;Quantity identification;Tool-change accessories;Return-to-location discipline",
+3:"Machine exterior;Machine bed;Machine covers;Control-panel exterior;Machine windows;Floor around machine;Coolant spillage;Oil leakage evidence;Hydraulic leakage evidence;Pneumatic connections;Chip trays;Coolant tank exterior;Conveyor surfaces;Worktable cleanliness;Fixtures and jigs;Tool holders;Pneumatic and hydraulic hoses;Electrical cabinet exterior;Lighting fixtures;Overhead surfaces;Waste bins;Scrap bins;Pallets and racks;Safety guards;Machine base;Drainage areas;Cleaning tools;Operator touchpoints;Production material containers;General shop-floor condition"},
+ST:{n:"Store room",1:"Obsolete inventory;Damaged stock;Unidentified stock;Mixed inventory;Empty cartons;Broken pallets;Unused containers;Scrap mixed with stock;Rejected material mixed with good stock;Expired material;Excess packaging;Abandoned equipment;Loose material;Unnecessary records;Redundant racks;Excess stock in aisles;Unnecessary personal items;Unusable stock containers",
+2:"Rack identification;Bin identification;Location coding;Material identification;Category segregation;Good-stock segregation;Quarantine area;Scrap segregation;FIFO arrangement;Batch identification;Quantity labels;Shelf arrangement;Container arrangement;Heavy-material placement;Safe stacking;Rack load information;Aisle demarcation;Emergency access;Fire-equipment access;Receiving area;Dispatch area;Inspection area;Return-material area;Tool and consumable storage;Packaging material storage;Pallet parking;Material access;Spill-control supplies;Identification readability;Location consistency",
+3:"Floor cleanliness;Shelf cleanliness;Rack cleanliness;Bin cleanliness;Material packaging;Wall cleanliness;Ceiling cleanliness;Window cleanliness;Lighting cleanliness;Pallet cleanliness;Spill evidence;Oil and grease evidence;Dust-sensitive stock;Waste-bin condition;Packing area;Receiving area;Dispatch area;Drainage condition;Cleaning equipment;General storage condition"},
+LT:{n:"Laptop / workstation (physical and digital shown separately)",1:"Unnecessary desktop icons;Loose desktop files;Duplicate visible files;Old downloaded files;Unnecessary screenshots;Temporary work files;Unnecessary application shortcuts;Unused peripherals;Redundant accessories;Unnecessary paper notes;Unnecessary browser tabs;Old file versions;Unnecessary external storage;Unused applications;Recycle Bin accumulation",
+2:"Desktop folder structure;Logical folder names;Project-wise arrangement;Department-wise arrangement;Standard naming convention;Version identification;Downloads organisation;Document separation;Shortcut organisation;Taskbar organisation;Browser bookmark organisation;Window arrangement;File Explorer navigation;Cloud-folder organisation;Backup-location visibility;Accessory storage;Cable arrangement;Laptop placement;Docking station arrangement;Workstation layout",
+3:"Screen cleanliness;Keyboard cleanliness;Touchpad cleanliness;Palm-rest cleanliness;Laptop lid cleanliness;Vent cleanliness;Port-area cleanliness;Charger cleanliness;Mouse cleanliness;Headset cleanliness;Desk cleanliness;Cable cleanliness;Docking-station cleanliness;External monitor cleanliness;Accessory storage cleanliness;Food and beverage residue;Ventilation clearance;General workstation condition"},
+XX:{n:"General area",1:"Unnecessary or excess items;Obsolete items;Broken or unused items;Unidentified items;Waste or scrap lying around",2:"Defined locations;Labels and identification;Floor or zone markings;Items returned to place;Aisle and emergency access;Cable and hose routing",3:"Floors;Surfaces and equipment;Walls and ceilings;Spills and stains;Waste bins"}};
+var GUIDE={
+PL:["Wide shot of the whole area from the entrance","Machine, front: exterior, covers, control panel","Machine bed, worktable and floor around it","Tool, fixture and gauge storage; shadow boards","Material, WIP, rejection and scrap areas, plus walkways"],
+OF:["Wide shot of the whole office floor","Desk close-up: surface, keyboard, monitor, cables","Cabinets, shelves and drawers (open one)","Shared areas: printer, noticeboard, pantry edge","Floor, aisles, waste bins, emergency exits"],
+ST:["Wide shot from the entrance showing aisles","Racks straight on: labels and location codes","Shelf and bin close-up: material identification","Floor, aisles, receiving and dispatch areas","Rejection, scrap and quarantine areas, plus fire equipment"],
+LT:["Desk and laptop from above: whole workstation","Laptop keyboard, palm-rest and lid close-up","Cables, charger, accessories and ports","SCREENSHOT: desktop (mask sensitive data)","SCREENSHOT: Downloads / Documents folder and browser tabs"],
+XX:["Wide shot of the whole area","Left side and corners","Right side and corners","Close-up of storage or labels","Floor, aisles and waste points"]};
+var photos=[],R=null;
+$("date").value=new Date().toISOString().slice(0,10);
+function envT(){return L.types[+$("env").value]||L.types[0]}function envKey(){return envT().b}function envName(){return envT().n}
+function guide(){var e=envKey();$("gtxt").textContent="Photos for: "+envName();
+$("guide").innerHTML=GUIDE[e].map(function(g,i){return '<div class="sh"><b>Photo '+(i+1)+(i==4?' (optional)':'')+'</b><br>'+g+'</div>'}).join("")}
+$("env").onchange=guide;
+function shrink(f){return new Promise(function(ok,no){var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var m=1280,s=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(function(b){ok({blob:b,url:c.toDataURL("image/jpeg",.7)})},"image/jpeg",.8)};im.onerror=function(){no()};im.src=u})}
+$("pick").onclick=function(){$("file").click()};
+$("file").onchange=async function(e){var fs=[].slice.call(e.target.files);for(var i=0;i<fs.length;i++){if(photos.length>=5){$("msg").textContent="Maximum 5 photos.";break}try{photos.push(await shrink(fs[i]))}catch(x){$("msg").textContent="Could not read "+fs[i].name}}e.target.value="";draw()};
+function draw(){$("th").innerHTML=photos.map(function(p,i){return '<div><img src="'+p.url+'" alt="Photo '+(i+1)+'"><b>'+(i+1)+'</b><i data-i="'+i+'">✕</i></div>'}).join("");$("cnt").textContent=photos.length+" / 5 added (minimum 4)";[].forEach.call($("th").querySelectorAll("i"),function(x){x.onclick=function(){photos.splice(+x.dataset.i,1);draw()}})}
+draw();
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function lib(e){var o="";[1,2,3].forEach(function(s){o+="\n"+["","SORT","SET IN ORDER","SHINE"][s]+" indicators:\n"+LIB[e][s].split(";").map(function(n,i){return e+"-S"+s+"-"+("0"+(i+1)).slice(-2)+" "+n}).join("\n")});return o}
+function lab(v){return v>=2.5?"Good":v>=1.5?"Average":"Weak"}
+function r2(v){return Math.round(v*100)/100}
+function mins(m){m=Math.round(m);return m<60?m+" min":Math.floor(m/60)+" h "+(m%60?m%60+" min":"")}
+$("go").onclick=async function(){
+ var e=envKey();if(!$("date").value||!$("who").value||!$("whom").value.trim()||!$("area").value.trim()){$("msg").innerHTML='<span class="err">Fill all * fields.</span>';return}
+ if(photos.length<4){$("msg").innerHTML='<span class="err">Add 4 or 5 photos.</span>';return}
+ var sample=await claude.use("sample");if(!sample){$("msg").innerHTML='<span class="err">AI assessment is not available in this view.</span>';return}
+ $("go").disabled=true;$("msg").textContent="Analysing "+photos.length+" photographs… this can take a minute.";
+ var p="You are an expert 5S auditor. Write ALL text in very simple English (reader knows English as a second language): short sentences, common words, no jargon, max 12 words per sentence. Assess ONLY Sort (1S), Set in Order (2S) and Shine (3S) from the attached "+photos.length+" photographs (numbered 1 to "+photos.length+" in order). Area type: "+envName()+" (use the "+LIB[e].n+" criteria). Area: "+$("area").value+". Auditee: "+$("whom").value+". Extra context: "+($("ctx").value||"none")+".\n"+
+ "RULES: Judge each indicator independently from visible evidence. Items outside the camera view are 'Not visible', never a failure. Do not double-count one underlying issue across indicators. Protective oil film, necessary coolant or unavoidable process residue is not a failure if controlled and contained. Never recommend deleting a file just because it looks old: flag it for review. A tidy look does not prove stock accuracy or cybersecurity. If photos are unsuitable (wrong area, blurry, too dark, too few views), lower the evidence level and say so.\n"+
+ "Level per S: 1 = poor/not established (problems evident, no system); 2 = partially established (mostly done, inconsistent, exceptions remain); 3 = visibly established (absent problems, consistent labels/locations, clean). Give each S a score from 1.0 to 3.0 (one decimal) reflecting the share and severity of indicators passed, partial and failed. Photo evidence level 1-3 is separate and not part of the score.\n"+
+ "INDICATOR LIBRARY (use these IDs):"+lib(e)+"\n"+
+ "Return ONLY JSON: {\"s1\":{\"score\":n,\"why\":\"2-4 sentences explaining how the score was derived\"},\"s2\":{...},\"s3\":{...},\"evidence_level\":n,\"evidence_note\":\"...\",\"summary\":\"1-2 short sentence overall verdict\",\"findings\":[{\"s\":1|2|3,\"id\":\"indicator ID\",\"name\":\"...\",\"status\":\"Pass|Partial|Fail|Not visible\",\"photo\":n,\"observation\":\"what you see\"}],\"actions\":[{\"s\":1|2|3,\"action\":\"specific corrective action\",\"priority\":\"High|Medium|Low\",\"minutes\":n,\"people\":n,\"ref\":\"indicator ID(s)\"}],\"photo_feedback\":[\"retake or missing-view advice\"],\"total_minutes\":n}\n"+
+ "List findings for every Fail and Partial indicator, for key Pass indicators (at most 10) and for Not visible ones in a single grouped entry per S. Keep observations under 25 words. Give 4-12 actions ordered by priority, with realistic minutes of work for one person (minutes) and number of people suggested. total_minutes = sum of action minutes divided by people, rounded.";
+ try{
+  var lim=await sample.limits();if(!lim||!lim.images)throw{code:"images_unavailable"};
+  R=await sample.json(p,{images:photos.map(function(x){return x.blob}),modelTier:"complex",cache:false});
+  show();learn();$("msg").textContent="";
+ }catch(x){$("msg").innerHTML='<span class="err">'+(x.code==="not_granted"?"Permission to use Claude was declined.":x.code==="rate_limited"?"Too many requests; wait a moment and try again.":x.code==="images_unavailable"?"Image analysis is unavailable in this view.":"The assessment could not be completed ("+esc(x.code||x.message||"error")+"). Please try again.")+'</span>'}
+ $("go").disabled=false};
+function show(){
+ var s=[1,2,3].map(function(i){var v=Math.min(3,Math.max(1,+R["s"+i].score||1));R["s"+i].score=r2(v);return R["s"+i].score});
+ R.total=r2((s[0]+s[1]+s[2])/3);
+ var nm=["1S Sort","2S Set in Order","3S Shine"];
+ $("scores").innerHTML=s.map(function(v,i){return '<div><small>'+nm[i]+'</small><big>'+v.toFixed(2)+'</big><small>/ 3 · '+lab(v)+'</small></div>'}).join("")+'<div class="t"><small>Overall (average)</small><big>'+R.total.toFixed(2)+'</big><small>/ 3 · '+lab(R.total)+'</small></div>';
+ var pv=parseFloat($("prev").value);$("sum").textContent=R.summary+(isNaN(pv)?"":"  Change since previous audit: "+(R.total-pv>=0?"+":"")+r2(R.total-pv)+".");
+ $("evid").textContent="Photo evidence level "+R.evidence_level+" / 3 (not part of the score). "+(R.evidence_note||"");
+ $("why").innerHTML=[1,2,3].map(function(i){return '<p><b>'+nm[i-1]+' ('+s[i-1].toFixed(2)+'):</b> '+esc(R["s"+i].why)+'</p>'}).join("");
+ $("ft").innerHTML='<tr><th>S</th><th>ID</th><th>Indicator</th><th>Status</th><th>Photo</th><th>Observation</th></tr>'+(R.findings||[]).map(function(f){return '<tr><td>'+f.s+'S</td><td>'+esc(f.id)+'</td><td>'+esc(f.name)+'</td><td><span class="pill '+(f.status||"").split(" ")[0]+'">'+esc(f.status)+'</span></td><td>'+esc(f.photo)+'</td><td>'+esc(f.observation)+'</td></tr>'}).join("");
+ var A=R.actions||[];$("at").innerHTML='<tr><th>#</th><th>S</th><th>Action</th><th>Priority</th><th>Effort</th><th>People</th></tr>'+A.map(function(a,i){return '<tr><td>'+(i+1)+'</td><td>'+a.s+'S</td><td>'+esc(a.action)+(a.ref?' <span class="note">['+esc(a.ref)+']</span>':'')+'</td><td><span class="pill '+a.priority+'">'+esc(a.priority)+'</span></td><td>'+mins(a.minutes)+'</td><td>'+(a.people||1)+'</td></tr>'}).join("");
+ $("tt").textContent="Estimated total time to close all actions: "+mins(R.total_minutes||0);
+ $("pq").innerHTML=(R.photo_feedback&&R.photo_feedback.length?"<ul>"+R.photo_feedback.map(function(x){return "<li>"+esc(x)+"</li>"}).join("")+"</ul>":"No issues noted.");
+ $("res").classList.remove("hid");$("res").scrollIntoView({behavior:"smooth"})}
+function meta(){var w=$("who").value+($("wname").value.trim()?" – "+$("wname").value.trim():"");return{date:$("date").value,who:w,whom:$("whom").value.trim(),area:$("area").value.trim(),env:envName(),site:$("site").value,shift:$("shift").value}}
+async function save(name,data,ext){var d=await claude.use("downloads");if(!d){$("dm").textContent="Downloads are not available in this view.";return}try{await d.save({filename:name,data:data});$("dm").textContent=ext+" ready."}catch(x){$("dm").textContent=x.code==="declined"?"Download cancelled.":"Download failed ("+x.code+")."}}
+function ddmmmyy(s){var q=String(s).split("-");if(q.length!==3)return String(s);var N=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];return q[2]+"-"+N[+q[1]-1]+"-"+q[0].slice(2)}
+function fname(x){var m=meta();return ddmmmyy(m.date)+"_5S_Audit_"+m.area.replace(/[^\w]+/g,"_")+"_"+m.date+"."+x}
+$("xls").onclick=function(){var m=meta();var ws=XLSX.utils.aoa_to_sheet([["Date","Who","For Whom","Area Name","1S Score","2S Score","3S Score","Overall Score"],[m.date,m.who,m.whom,m.area,R.s1.score,R.s2.score,R.s3.score,R.total]]);ws["!cols"]=[12,28,24,28,10,10,10,14].map(function(w){return{wch:w}});var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"5S Audit");var a=XLSX.write(wb,{bookType:"xlsx",type:"array"});save(fname("xlsx"),new Blob([a],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),"Excel")};
+$("pdf").onclick=function(){
+ var J=window.jspdf.jsPDF,d=new J({unit:"mm",format:"a4"}),W=210,M=15,y=M,m=meta();
+ function pg(h){if(y+h>282){d.addPage();y=M}}
+ function T(t,sz,b,col){d.setFont("helvetica",b?"bold":"normal");d.setFontSize(sz);d.setTextColor.apply(d,col||[30,36,48]);var L=d.splitTextToSize(String(t==null?"":t),W-2*M);L.forEach(function(l){pg(sz*.45);y+=sz*.42;d.text(l,M,y);y+=sz*.12});y+=1.5}
+ function row(c,w,b,fill){var L=c.map(function(t,i){return d.splitTextToSize(String(t==null?"":t),w[i]-2)}),h=Math.max.apply(null,L.map(function(l){return l.length}))*4.1+2;pg(h);if(fill){d.setFillColor(230,236,242);d.rect(M,y,W-2*M,h,"F")}d.setFont("helvetica",b?"bold":"normal");d.setFontSize(8.5);d.setTextColor(30,36,48);var x=M;L.forEach(function(l,i){d.text(l,x+1,y+4);x+=w[i]});y+=h;d.setDrawColor(210);d.line(M,y,W-M,y)}
+ d.setFillColor(20,20,60);d.rect(0,0,W,22,"F");d.setTextColor(255);d.setFont("helvetica","bold");d.setFontSize(17);d.text("5S Audit Report: Sort, Set in Order, Shine",M,14);y=29;
+ [["Date",m.date],["Audited by",m.who],["Auditee",m.whom],["Area",m.area],["Area type",m.env],["Site / shift",(m.site||"-")+" / "+(m.shift||"-")]].forEach(function(r){row([r[0],r[1]],[40,140],false,false)});y+=4;
+ T("Scores (scale 1 to 3, overall = average of 1S, 2S and 3S)",12,1);
+ row(["1S Sort","2S Set in Order","3S Shine","OVERALL"],[45,45,45,45],1,1);row([R.s1.score.toFixed(2)+"  "+lab(R.s1.score),R.s2.score.toFixed(2)+"  "+lab(R.s2.score),R.s3.score.toFixed(2)+"  "+lab(R.s3.score),R.total.toFixed(2)+"  "+lab(R.total)],[45,45,45,45],1,0);y+=3;
+ T(R.summary,10);T("Photo evidence level "+R.evidence_level+"/3 (separate from the score). "+(R.evidence_note||""),9,0,[100,110,120]);
+ T("Method: each indicator in the 5S indicator library was judged from visible evidence only (Pass / Partial / Fail / Not visible). Each S was then rated 1 (poor), 2 (partial) or 3 (visibly established) with one-decimal precision; the overall score is the simple average. Retain the individual S scores because a strong Shine score must not hide a poor Sort score.",9,0,[100,110,120]);
+ y+=2;T("How each S was derived",12,1);[1,2,3].forEach(function(i){T(["","1S Sort","2S Set in Order","3S Shine"][i]+": "+R["s"+i].score.toFixed(2),10,1);T(R["s"+i].why,9.5)});
+ y+=2;T("Indicator findings",12,1);row(["S","ID","Indicator","Status","Ph.","Observation"],[8,22,34,18,8,90],1,1);(R.findings||[]).forEach(function(f){row([f.s+"S",f.id,f.name,f.status,f.photo,f.observation],[8,22,34,18,8,90])});
+ y+=4;T("Actions needed and estimated time",12,1);row(["#","S","Action","Priority","Effort","People"],[7,8,102,19,28,16],1,1);(R.actions||[]).forEach(function(a,i){row([i+1,a.s+"S",a.action+(a.ref?" ["+a.ref+"]":""),a.priority,mins(a.minutes),a.people||1],[7,8,102,19,28,16])});
+ y+=2;T("Estimated total time to close all actions: "+mins(R.total_minutes||0),10,1);T("Estimates assume one trained person per action and exclude procurement or approvals.",8.5,0,[100,110,120]);
+ if(R.photo_feedback&&R.photo_feedback.length){y+=2;T("Photo quality and missing views",12,1);R.photo_feedback.forEach(function(x){T("• "+x,9.5)})}
+ d.addPage();y=M;T("Photographs assessed",12,1);var x=M,iw=56,ih=42;photos.forEach(function(p,i){if(x+iw>W-M){x=M;y+=ih+9}pg(ih+9);d.addImage(p.url,"JPEG",x,y,iw,ih);d.setFontSize(8);d.setTextColor(60);d.text("Photo "+(i+1),x,y+ih+4);x+=iw+4});y+=ih+14;
+ T("Generated by AI from photographs only. Items outside the camera view were not scored. A human auditor should confirm uncertain observations and all safety-related findings.",8.5,0,[100,110,120]);
+ save(fname("pdf"),d.output("blob"),"PDF")};
+/* ---- Dynamic lists ---- */
+var DEF={who:["Self-audit","Area Supervisor","Department Head","Quality Manager","EHS / Safety Officer","Internal 5S Auditor","Management","External Auditor"],aud:[],auditee:[],area:[],types:[{n:"Manufacturing plant",b:"PL"},{n:"Office",b:"OF"},{n:"Store room",b:"ST"},{n:"Laptop / workstation",b:"LT"},{n:"Other (general criteria)",b:"XX"}]};
+var L=JSON.parse(JSON.stringify(DEF)),DB=null,SEC=[["who","Who is auditing (roles / teams)","e.g. Plant Head"],["aud","Auditor names","e.g. R. Kulkarni"],["auditee","Auditee names","Person / team"],["area","Area names","e.g. CNC Bay 2"]];
+function has(a,v){return a.some(function(x){return x.toLowerCase()===v.toLowerCase()})}
+function fill(){var w=$("who").value,t=$("env").value;$("who").innerHTML='<option value="">Select…</option>'+L.who.map(function(x){return '<option>'+esc(x)+'</option>'}).join("");$("who").value=w;
+ $("env").innerHTML=L.types.map(function(x,i){return '<option value="'+i+'">'+esc(x.n)+'</option>'}).join("");$("env").value=L.types[+t]?t:0;
+ [["dl_aud","aud"],["dl_auditee","auditee"],["dl_area","area"]].forEach(function(p){$(p[0]).innerHTML=L[p[1]].map(function(x){return '<option value="'+esc(x)+'">'}).join("")});guide()}
+async function persist(){try{localStorage.setItem("s5lists",JSON.stringify(L))}catch(x){}try{if(DB)await DB.set({json:JSON.stringify(L)})}catch(x){}}
+function norm(o){if(!o)return;["who","aud","auditee","area"].forEach(function(k){if(Array.isArray(o[k]))L[k]=o[k].filter(function(x){return typeof x==="string"&&x.trim()})});if(Array.isArray(o.types)&&o.types.length)L.types=o.types.filter(function(x){return x&&x.n&&LIB[x.b]})}
+async function initLists(){try{norm(JSON.parse(localStorage.getItem("s5lists")))}catch(x){}fill();
+ try{var db=await claude.use("db");if(db){DB=db.doc("config/lists");var s=await DB.get();if(s.exists){norm(JSON.parse(s.data().json));fill();try{localStorage.setItem("s5lists",JSON.stringify(L))}catch(x){}}}}catch(x){DB=null}if(mgrOpen())rmgr()}
+function mgrOpen(){return !$("mgr").classList.contains("hid")}
+$("mgrbtn").onclick=function(){$("mgr").classList.toggle("hid");if(mgrOpen())rmgr()};
+function rmgr(){var h='<h2>Manage drop-down lists</h2><p class="s">Add or remove items; they appear in the drop-downs above. '+(DB?'Lists are shared with everyone who can open this page.':'Lists are saved on this device.')+' New names you type in an audit are also added automatically.</p>';
+ SEC.forEach(function(s){h+='<div style="margin-bottom:12px"><label>'+s[1]+'</label><div>'+L[s[0]].map(function(x,i){return '<span class="chip">'+esc(x)+'<u data-k="'+s[0]+'" data-i="'+i+'">✕</u></span>'}).join("")+'</div><div class="mr"><input data-add="'+s[0]+'" placeholder="'+s[2]+'"><button data-addb="'+s[0]+'">Add</button></div></div>'});
+ h+='<div style="margin-bottom:12px"><label>Area types (each uses one built-in criteria set)</label><div>'+L.types.map(function(x,i){return '<span class="chip">'+esc(x.n)+' · '+LIB[x.b].n.split(" (")[0]+'<u data-k="types" data-i="'+i+'">✕</u></span>'}).join("")+'</div><div class="mr"><input id="tn" placeholder="e.g. CNC Shop, Warehouse, R&amp;D Lab"><select id="tb">'+["PL","OF","ST","LT","XX"].map(function(k){return '<option value="'+k+'">'+LIB[k].n.split(" (")[0]+'</option>'}).join("")+'</select><button id="tadd">Add</button></div></div>';
+ h+='<div class="mr"><button class="o" id="imp">⬆ Import from Excel</button><button class="o" id="tpl">⬇ Excel template</button><button class="o" id="rst">Reset to defaults</button><input type="file" id="impf" accept=".xlsx,.xls,.csv" class="hid"></div><p class="note" id="mm">Import columns: Who Is Auditing, Auditor Name, Auditee, Area Name, Area Type, Base Criteria (Plant / Office / Store / Laptop / Other). Imported items are added to existing ones.</p>';
+ $("mgr").innerHTML=h;
+ [].forEach.call($("mgr").querySelectorAll("u"),function(u){u.onclick=function(){L[u.dataset.k].splice(+u.dataset.i,1);if(u.dataset.k==="types"&&!L.types.length)L.types=DEF.types.slice();fill();persist();rmgr()}});
+ function add(k){var i=$("mgr").querySelector('[data-add="'+k+'"]'),v=i.value.trim();if(v&&!has(L[k],v)){L[k].push(v);fill();persist();rmgr()}}
+ [].forEach.call($("mgr").querySelectorAll("[data-addb]"),function(b){b.onclick=function(){add(b.dataset.addb)}});
+ [].forEach.call($("mgr").querySelectorAll("[data-add]"),function(i){i.onkeydown=function(e){if(e.key==="Enter")add(i.dataset.add)}});
+ $("tadd").onclick=function(){var v=$("tn").value.trim();if(v&&!L.types.some(function(x){return x.n.toLowerCase()===v.toLowerCase()})){L.types.push({n:v,b:$("tb").value});fill();persist();rmgr()}};
+ $("rst").onclick=function(){if(confirm("Reset all lists to defaults?")){L=JSON.parse(JSON.stringify(DEF));fill();persist();rmgr()}};
+ $("imp").onclick=function(){$("impf").click()};$("impf").onchange=impX;$("tpl").onclick=tpl}
+function baseOf(s){s=String(s||"").toLowerCase();return /plant|manuf|shop|prod|PL/i.test(s)?"PL":/office|OF/i.test(s)?"OF":/store|ware|stock|ST/i.test(s)?"ST":/lap|work|desk|LT/i.test(s)?"LT":"XX"}
+function hk(s){s=String(s||"").toLowerCase();if(/area/.test(s)&&/type/.test(s))return"type";if(/base|criteria/.test(s))return"base";if(/area/.test(s))return"area";if(/auditee|whom/.test(s))return"auditee";if(/who/.test(s))return"who";if(/auditor|name/.test(s))return"aud";return""}
+async function impX(e){var f=e.target.files[0];if(!f)return;try{var wb=XLSX.read(await f.arrayBuffer()),rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:""}),H=rows[0].map(hk),n=0;
+ for(var r=1;r<rows.length;r++){var tn="",tb="";H.forEach(function(k,c){var v=String(rows[r][c]==null?"":rows[r][c]).trim();if(!v||!k)return;if(k==="type")tn=v;else if(k==="base")tb=v;else if(!has(L[k],v)){L[k].push(v);n++}});if(tn&&!L.types.some(function(x){return x.n.toLowerCase()===tn.toLowerCase()})){L.types.push({n:tn,b:baseOf(tb||tn)});n++}}
+ fill();persist();rmgr();$("mm").textContent="Imported "+n+" new item(s)."}catch(x){$("mm").innerHTML='<span class="err">Could not read that file.</span>'}e.target.value=""}
+function tpl(){var ws=XLSX.utils.aoa_to_sheet([["Who Is Auditing","Auditor Name","Auditee","Area Name","Area Type","Base Criteria"],["Quality Manager","R. Kulkarni","A. Patil","CNC Bay 2","CNC Shop","Plant"],["Self-audit","S. Shah","Accounts Team","Accounts Office","Office","Office"]]);ws["!cols"]=[24,22,22,22,22,16].map(function(w){return{wch:w}});var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Lists");save("5S_lists_template.xlsx",new Blob([XLSX.write(wb,{bookType:"xlsx",type:"array"})]),"Template")}
+function learn(){var ch=0;[["wname","aud"],["whom","auditee"],["area","area"]].forEach(function(p){var v=$(p[0]).value.trim();if(v&&!has(L[p[1]],v)){L[p[1]].push(v);ch=1}});if(ch){fill();persist();if(mgrOpen())rmgr()}}
+initLists();
+/* ---- v3: indicator-wise points; S = avg/10 x 5; overall = sum, max 15 ---- */
+var MX=1;
+function lab(v,mx){var p=v/(mx||MX);return p>=.83?"Good":p>=.5?"Average":"Weak"}
+function ids(e){var o=[];[1,2,3].forEach(function(s){LIB[e][s].split(";").forEach(function(n,i){o.push({s:s,id:e+"-S"+s+"-"+("0"+(i+1)).slice(-2),name:n})})});return o}
+function st(p){return p==null?"Not visible":p>=8?"Pass":p>=4?"Partial":"Fail"}
+var SN=["","1S Sort","2S Set in Order","3S Shine"];
+function calc(e){var it={};(R.items||[]).forEach(function(x){it[x.id]=x});
+ R.rows=ids(e).map(function(d){var x=it[d.id]||{},p=(x.p==null||x.p==="")?null:Math.max(0,Math.min(10,Math.round(+x.p)));if(isNaN(p))p=null;return{s:d.s,id:d.id,name:d.name,p:p,ph:x.ph||"",o:x.o||""}});
+ R.sub={};R.total=0;[1,2,3].forEach(function(s){var r=R.rows.filter(function(z){return z.s===s}),n=r.filter(function(z){return z.p!=null}).length,sum=r.reduce(function(a,z){return a+(z.p||0)},0),w=n?MX/n:0;
+  r.forEach(function(z){z.w=z.p==null?0:w;z.e=z.p==null?0:z.p/10*w});var avg=n?sum/n:0,sc=r2(n?avg/10*MX:0);
+  R.sub[s]={n:n,tot:r.length,sum:sum,avg:avg,w:w,score:sc,skip:r.length-n};R["s"+s]=R["s"+s]||{};R["s"+s].score=sc;R.total+=sc});R.total=r2(R.total)}
+function f2(v){return (+v).toFixed(2)}
+function f4(v){return (+v).toFixed(4)}
+function deriv(s){var b=R.sub[s];return b.n?"Sum of points "+b.sum+" across "+b.n+" scored indicators"+(b.skip?" ("+b.skip+" not visible, excluded)":"")+". Average = "+f2(b.avg)+" / 10. Score = "+f2(b.avg)+" / 10 \u00d7 1 = "+f2(b.score)+" / 1. Each indicator carries a weight of 1 \u00f7 "+b.n+" = "+f4(b.w)+" marks.":"No indicator could be assessed from the photographs, so this S scores 0 and needs fresh photographs."}
+$("go").onclick=async function(){
+ var e=envKey();if(!$("date").value||!$("who").value||!$("whom").value.trim()||!$("area").value.trim()){$("msg").innerHTML='<span class="err">Fill all * fields.</span>';return}
+ if(photos.length<4){$("msg").innerHTML='<span class="err">Add 4 or 5 photos.</span>';return}
+ var sample=await claude.use("sample");if(!sample){$("msg").innerHTML='<span class="err">AI assessment is not available in this view.</span>';return}
+ $("go").disabled=true;$("msg").textContent="Checking photos\u2026 1 to 2 minutes.";
+ var p="You are an expert 5S auditor. Write ALL text in very simple English (reader knows English as a second language): short sentences, common words, no jargon, max 12 words per sentence. Assess ONLY Sort (1S), Set in Order (2S) and Shine (3S) from the attached "+photos.length+" photographs (numbered 1 to "+photos.length+" in order). Area type: "+envName()+" (use the "+LIB[e].n+" criteria). Area: "+$("area").value+". Auditee: "+$("whom").value+". Extra context: "+($("ctx").value||"none")+".\n"+
+ "TASK: give EVERY indicator below integer points from 0 to 10 based on visible evidence. 0-3 = poor / not established (clear problem evident); 4-7 = partially established (mostly done but inconsistent, exceptions remain); 8-10 = visibly established (no significant issue, consistent). Use the full range and be consistent and strict: reserve 9-10 for clearly excellent evidence. For the Sort indicators, points reflect how free the area is of that kind of unnecessary item; for Set in Order, how well the location, label or arrangement is established; for Shine, how clean that item is.\n"+
+ "RULES: If an indicator cannot be judged from the photos or does not apply, use p null (it is then excluded from the average); items outside the camera view are never failures. Do not double-count one underlying issue across indicators. Protective oil film, necessary coolant or unavoidable process residue is not a failure if controlled and contained. Never recommend deleting a file just because it looks old; flag it for review. A tidy look does not prove stock accuracy or cybersecurity. If photos are unsuitable (wrong area, blurry, dark, too few views), lower the evidence level and say so. Photo evidence level (1-3) is separate from the points.\n"+
+ "INDICATOR LIBRARY (use these IDs, exactly one entry each):"+lib(e)+"\n"+
+ "Return ONLY JSON: {\"s1\":{\"why\":\"1-2 short sentences on what drove the 1S points\"},\"s2\":{\"why\":\"...\"},\"s3\":{\"why\":\"...\"},\"evidence_level\":n,\"evidence_note\":\"...\",\"summary\":\"1-2 short sentence overall verdict\",\"items\":[{\"id\":\"indicator ID\",\"p\":0-10 or null,\"ph\":photo number or 0,\"o\":\"what you see, max 12 words\"}],\"actions\":[{\"s\":1|2|3,\"action\":\"specific corrective action\",\"priority\":\"High|Medium|Low\",\"minutes\":n,\"people\":n,\"ref\":\"indicator ID(s)\"}],\"photo_feedback\":[\"retake or missing-view advice\"],\"total_minutes\":n}\n"+
+ "Give 4-12 actions ordered by priority for the lowest-scoring indicators, with realistic minutes of work for one person and the number of people suggested. total_minutes = sum of action minutes divided by people, rounded.";
+ try{var lim=await sample.limits();if(!lim||!lim.images)throw{code:"images_unavailable"};
+  R=await sample.json(p,{images:photos.map(function(x){return x.blob}),modelTier:"complex",cache:false});
+  calc(e);show();learn();$("msg").textContent="";
+ }catch(x){$("msg").innerHTML='<span class="err">'+(x.code==="not_granted"?"Permission to use Claude was declined.":x.code==="rate_limited"?"Too many requests; wait a moment and try again.":x.code==="images_unavailable"?"Image analysis is unavailable in this view.":"The assessment could not be completed ("+esc(x.code||x.message||"error")+"). Please try again.")+'</span>'}
+ $("go").disabled=false};
+function show(){
+ $("scores").innerHTML=[1,2,3].map(function(i){var v=R.sub[i].score;return '<div><small>'+SN[i]+'</small><big>'+f2(v)+'</big><small>/ 1 \u00b7 '+lab(v)+'</small></div>'}).join("")+'<div class="t"><small>Overall (1S + 2S + 3S)</small><big>'+f2(R.total)+'</big><small>/ 3 \u00b7 '+lab(R.total,3)+'</small></div>';
+ var pv=parseFloat($("prev").value);$("sum").textContent=R.summary+(isNaN(pv)?"":"  Change since previous audit: "+(R.total-pv>=0?"+":"")+r2(R.total-pv)+" points.");
+ $("evid").textContent="Photo evidence level "+R.evidence_level+" / 3 (not part of the score). "+(R.evidence_note||"");
+ $("why").innerHTML='<p class="note">Method: each indicator gets 0\u201310 points (0\u20133 poor, 4\u20137 partial, 8\u201310 visibly established). Indicators that cannot be seen are excluded. S score = average points \u00f7 10 \u00d7 1 (maximum 1). Overall = 1S + 2S + 3S (maximum 3).</p>'+[1,2,3].map(function(i){return '<p><b>'+SN[i]+' = '+f2(R.sub[i].score)+' / 1.</b> '+esc(deriv(i))+'<br>'+esc((R["s"+i]||{}).why||"")+'</p>'}).join("");
+ var h='<tr><th>S</th><th>ID</th><th>Indicator</th><th>Points /10</th><th>Weight (max marks)</th><th>Marks earned</th><th>Status</th><th>Photo</th><th>Observation</th></tr>';
+ [1,2,3].forEach(function(s){R.rows.filter(function(z){return z.s===s}).forEach(function(z){h+='<tr><td>'+s+'S</td><td>'+z.id+'</td><td>'+esc(z.name)+'</td><td>'+(z.p==null?"\u2013":z.p)+'</td><td>'+(z.p==null?"\u2013":f4(z.w))+'</td><td>'+(z.p==null?"\u2013":f4(z.e))+'</td><td><span class="pill '+st(z.p).split(" ")[0]+'">'+st(z.p)+'</span></td><td>'+esc(z.ph||"")+'</td><td>'+esc(z.o)+'</td></tr>'});var b=R.sub[s];h+='<tr style="font-weight:700;background:var(--ac2)"><td colspan="3">Subtotal '+SN[s]+'</td><td>'+b.sum+'</td><td>'+(b.n?f2(b.w*b.n):0)+'</td><td>'+f2(b.score)+' / 1</td><td colspan="3">'+b.n+' scored, '+b.skip+' not visible</td></tr>'});$("ft").innerHTML=h;
+ var A=R.actions||[];$("at").innerHTML='<tr><th>#</th><th>S</th><th>Action</th><th>Priority</th><th>Effort</th><th>People</th></tr>'+A.map(function(a,i){return '<tr><td>'+(i+1)+'</td><td>'+a.s+'S</td><td>'+esc(a.action)+(a.ref?' <span class="note">['+esc(a.ref)+']</span>':'')+'</td><td><span class="pill '+a.priority+'">'+esc(a.priority)+'</span></td><td>'+mins(a.minutes)+'</td><td>'+(a.people||1)+'</td></tr>'}).join("");
+ $("tt").textContent="Estimated total time to close all actions: "+mins(R.total_minutes||0);
+ $("pq").innerHTML=(R.photo_feedback&&R.photo_feedback.length?"<ul>"+R.photo_feedback.map(function(x){return "<li>"+esc(x)+"</li>"}).join("")+"</ul>":"No issues noted.");
+ $("res").classList.remove("hid");$("res").scrollIntoView({behavior:"smooth"})}
+$("pdf").onclick=function(){
+ var J=window.jspdf.jsPDF,d=new J({unit:"mm",format:"a4"}),W=210,M=15,y=M,m=meta();
+ function pg(h){if(y+h>282){d.addPage();y=M}}
+ function T(t,sz,b,col){d.setFont("helvetica",b?"bold":"normal");d.setFontSize(sz);d.setTextColor.apply(d,col||[30,36,48]);d.splitTextToSize(String(t==null?"":t),W-2*M).forEach(function(l){pg(sz*.45);y+=sz*.42;d.text(l,M,y);y+=sz*.12});y+=1.5}
+ function row(c,w,b,fill){var L2=c.map(function(t,i){return d.splitTextToSize(String(t==null?"":t),w[i]-2)}),h=Math.max.apply(null,L2.map(function(l){return l.length}))*4.1+2;pg(h);if(fill){d.setFillColor(fill===2?205:230,fill===2?228:236,fill===2?218:242);d.rect(M,y,W-2*M,h,"F")}d.setFont("helvetica",b?"bold":"normal");d.setFontSize(8.5);d.setTextColor(30,36,48);var x=M;L2.forEach(function(l,i){d.text(l,x+1,y+4);x+=w[i]});y+=h;d.setDrawColor(210);d.line(M,y,W-M,y)}
+ d.setFillColor(20,20,60);d.rect(0,0,W,22,"F");try{d.setFillColor(255);d.roundedRect(W-M-46,5,46,12,2,2,"F");d.addImage("data:image/png;base64,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","PNG",W-M-43,7.4,40,6.4)}catch(er){}d.setTextColor(255);d.setFont("helvetica","bold");d.setFontSize(17);d.text("5S Audit Report: Sort, Set in Order, Shine",M,14);y=29;
+ [["Date",m.date],["Audited by",m.who],["Auditee",m.whom],["Area",m.area],["Area type",m.env],["Site / shift",(m.site||"-")+" / "+(m.shift||"-")]].forEach(function(r){row([r[0],r[1]],[40,140],false,false)});y+=4;
+ T("Photographs assessed ("+PP().length+")",12,1);y+=1;var px=M,iw=58,ih=44,gap=3;PP().forEach(function(p,i){if(px+iw>W-M+1){px=M;y+=ih+9}pg(ih+9);try{d.addImage(p.url,"JPEG",px,y,iw,ih,undefined,"FAST")}catch(er){d.setDrawColor(180);d.rect(px,y,iw,ih);d.setFontSize(8);d.setTextColor(120);d.text("Photo "+(i+1)+" could not be embedded",px+3,y+ih/2)}d.setDrawColor(200);d.rect(px,y,iw,ih);d.setFont("helvetica","normal");d.setFontSize(8);d.setTextColor(60);d.text(p.cap||("Photo "+(i+1)),px,y+ih+4);px+=iw+gap});y+=ih+10;T("Photographs are as submitted; anything outside these views was not scored.",8.5,0,[100,110,120]);T(S4note(),8.5,0,[100,110,120]);
+ d.addPage();y=M;
+ T("Score summary (1S, 2S, 3S, 4S each out of 1; overall out of 4)",12,1);
+ var sw=[34,28,26,26,30,36];row(["S","Indicators scored","Total points","Average /10","Score","Level"],sw,1,1);
+ [1,2,3].forEach(function(s){var b=R.sub[s];row([SN[s],b.n+" of "+b.tot,b.sum,f2(b.avg),f2(b.score)+" / 1",lab(b.score)],sw,0,0)});row(["4S Systematize",R.s4.met+" of 5 criteria met","-","-",f2(R.s4.score)+" / 1",lab(R.s4.score)],sw,0,0);row(["OVERALL","","","",f2(R.total)+" / 4",lab(R.total,4)],sw,1,2);y+=3;
+ T(R.summary,10);T("Photo evidence level "+R.evidence_level+"/3 (separate from the score). "+(R.evidence_note||""),9,0,[100,110,120]);
+ y+=1;T("How the score is derived",12,1);
+ T("1. Every indicator in the 5S indicator library for this area type is judged from the photographs and given points from 0 to 10: 0-3 = poor / not established, 4-7 = partially established, 8-10 = visibly established.\n2. Indicators that cannot be seen or do not apply are marked Not visible and excluded, so nothing outside the camera view is counted as a failure.\n3. Each scored indicator carries an equal weight: 1 mark divided by the number of scored indicators in that S. Marks earned = points / 10 x weight.\n4. S score (out of 1) = sum of marks earned = average points / 10 x 1. Overall (out of 4) = 1S + 2S + 3S + 4S (4S is scored from the Master Legend and rack/bin list, see below). Level: below 50% poor, 50-82% partially established, 83% and above visibly established.\n5. 4S Systematize is not averaged: it is scored on a fixed ladder (0 to 5) from the Master Legend and the rack/bin list, and the ladder level reached (0 to 5) divided by 5 is the 4S score out of 1 (see the 4S section).",9,0,[60,70,80]);
+ [1,2,3].forEach(function(s){T(SN[s]+": "+f2(R.sub[s].score)+" / 1",10,1);T(deriv(s),9);T((R["s"+s]||{}).why||"",9.5)});
+ y+=1;T("4S Systematize: "+f2(R.s4.score)+" / 1",10,1);T(deriv4(),9);T(S4note(),9,0,[100,110,120]);
+ var cw=[21,40,12,16,16,17,10,48];
+ [1,2,3].forEach(function(s){y+=3;pg(30);T("Indicator-wise points: "+SN[s],12,1);row(["ID","Indicator","Points /10","Weight (marks)","Marks earned","Status","Photo","Observation"],cw,1,1);
+  R.rows.filter(function(z){return z.s===s}).forEach(function(z){row([z.id,z.name,z.p==null?"-":z.p,z.p==null?"-":f4(z.w),z.p==null?"-":f4(z.e),st(z.p),z.ph||"",z.o],cw)});
+  var b=R.sub[s];row(["Subtotal",SN[s],b.sum,b.n?f2(b.w*b.n):"0",f2(b.score)+" / 1","","",b.n+" scored, "+b.skip+" not visible"],cw,1,2)});
+ y+=4;pg(40);T("Criterion-wise assessment: 4S Systematize",12,1);var fw=[14,50,16,100];row(["ID","Criterion","Result","Evidence"],fw,1,1);R.s4.steps.forEach(function(s,i){row(["4S-0"+(i+1),s[0],s[1]?"Met":"Not met",s[2]],fw)});
+ y+=3;T("4S scoring ladder (level reached is highlighted)",10,1);var lw=[34,126,20];row(["Level = 4S score","Condition","Reached"],lw,1,1);LAD.forEach(function(l){var hit=+l[0]===R.s4.lvl;row([l[0]+" / 5 = "+f2(+l[0]/5)+" / 1",l[1],hit?"YES":""],lw,hit,hit?2:0)});row(["4S score","4S Systematize = ladder level "+R.s4.lvl+" of 5 divided by 5 ("+R.s4.met+" of 5 criteria met)",f2(R.s4.score)+" / 1"],lw,1,2);
+ y+=4;T("Actions needed and estimated time",12,1);var aw=[7,8,102,19,28,16];row(["#","S","Action","Priority","Effort","People"],aw,1,1);(R.actions||[]).forEach(function(a,i){row([i+1,a.s+"S",a.action+(a.ref?" ["+a.ref+"]":""),a.priority,mins(a.minutes),a.people||1],aw)});
+ y+=2;T("Estimated total time to close all actions: "+mins(R.total_minutes||0),10,1);T("Estimates assume one trained person per action and exclude procurement or approvals.",8.5,0,[100,110,120]);
+ if(R.photo_feedback&&R.photo_feedback.length){y+=2;T("Photo quality and missing views",12,1);R.photo_feedback.forEach(function(x){T("- "+x,9.5)})}
+ y+=3;
+ T("Generated by AI from photographs only. Items outside the camera view were not scored. A human auditor should confirm uncertain observations and all safety-related findings.",8.5,0,[100,110,120]);
+ PDFBLOB=d.output("blob");if(!NOSAVE)save(fname("pdf"),PDFBLOB,"PDF")};
+/* ---- v4: 4S Systematize (Master Legend + rack/bin list), overall max 20 ---- */
+var S4={leg:null,bin:[]};
+function legOn(){return $("legsel").value==="y"&&S4.leg}
+function binOn(){return $("binsel").value==="y"&&S4.bin.length>0}
+function d4(){$("legbox").classList.toggle("hid",$("legsel").value==="n");$("binbox").classList.toggle("hid",$("binsel").value==="n");
+ $("legth").innerHTML=S4.leg?'<div><img src="'+S4.leg.url+'" alt="Master Legend"><b>L</b><i data-k="l">\u2715</i></div>':"";
+ $("binth").innerHTML=S4.bin.map(function(p,i){return '<div><img src="'+p.url+'" alt="Rack or bin photo"><b>'+(i+1)+'</b><i data-k="b" data-i="'+i+'">\u2715</i></div>'}).join("");$("bcnt").textContent=S4.bin.length+" / 2 added";
+ [].forEach.call(document.querySelectorAll("#legth i,#binth i"),function(x){x.onclick=function(){if(x.dataset.k==="l")S4.leg=null;else S4.bin.splice(+x.dataset.i,1);d4()}})}
+$("legsel").onchange=d4;$("binsel").onchange=d4;$("legbtn").onclick=function(){$("legf").click()};$("binbtn").onclick=function(){$("binf").click()};
+$("legf").onchange=async function(e){var f=e.target.files[0];if(f){try{S4.leg=await shrink(f)}catch(x){}}e.target.value="";d4()};
+$("binf").onchange=async function(e){var fs=[].slice.call(e.target.files);for(var i=0;i<fs.length&&S4.bin.length<2;i++){try{S4.bin.push(await shrink(fs[i]))}catch(x){}}e.target.value="";d4()};d4();
+function PP(){var a=photos.map(function(p,i){return{url:p.url,cap:"Photo "+(i+1)}});if(legOn())a.push({url:S4.leg.url,cap:"4S: Master Legend"});if($("binsel").value==="y")S4.bin.forEach(function(p,i){a.push({url:p.url,cap:"4S: Rack/bin "+(i+1)})});return a}
+function S4note(){var t="4S inputs: Master Legend "+(legOn()?"photographed":"declared Not Available")+"; rack/bin list "+(binOn()?"photographed":"declared Not Available")+".";var c=[$("s4item").value.trim(),$("s4rack").value.trim(),$("s4bin").value.trim()];if(c[0]||c[1]||c[2])t+=" Auditor checked item: "+(c[0]||"-")+", rack "+(c[1]||"-")+", bin "+(c[2]||"-")+".";return t}
+async function eval4(sample){
+ var lo=!!legOn(),bo=!!binOn(),A={},imgs=[],ds=[];
+ if(lo){imgs.push(S4.leg.blob);ds.push("Image 1: the Master Legend kept in the office (should list item names with rack and bin numbers).")}
+ if(bo){var k=imgs.length+1;S4.bin.forEach(function(p){imgs.push(p.blob)});ds.push("Image(s) "+k+(S4.bin.length>1?" to "+(k+S4.bin.length-1):"")+": taken at the rack/bin, normally the list or label stuck beside it and the rack/bin showing the stored item. Decide what each shows.")}
+ if(imgs.length){var p="You are a strict 5S auditor. Write ALL text in very simple English: short sentences, common words, max 12 words per sentence. checking 4S (Systematize / visual management). "+ds.join(" ")+" Area: "+$("area").value+". The auditor says the item checked was: "+($("s4item").value||"not stated")+", rack "+($("s4rack").value||"not stated")+", bin "+($("s4bin").value||"not stated")+". Judge only from the images; present=false if the image does not actually show that item; null where you cannot tell; never be generous. Return ONLY JSON: {\"legend\":{\"present\":bool,\"legible\":bool,\"entries\":[\"item | rack | bin\" up to 6 readable lines],\"note\":\"\"},\"binlist\":{\"present\":bool,\"legible\":bool,\"rack\":\"\",\"bin\":\"\",\"items\":[\"item names on the list\"],\"note\":\"\"},\"match\":{\"names_match\":bool|null,\"location_match\":bool|null,\"note\":\"which item you compared and whether its name AND rack/bin number agree between the Master Legend and the list at the rack/bin\"},\"stored\":{\"item_present\":bool|null,\"note\":\"what is actually stored in that rack/bin and whether it is the listed item\"},\"quality\":{\"legend_good\":bool|null,\"binlist_good\":bool|null,\"note\":\"clean, fully visible and legible, not torn/faded/dirty, properly fixed, neat\"}}";
+  A=await sample.json(p,{images:imgs,modelTier:"complex",cache:false})}
+ var g=function(o,k){return !!o&&o[k]===true},Lg=A.legend||{},Bn=A.binlist||{},Mt=A.match||{},St=A.stored||{},Q=A.quality||{};
+ var legend=lo&&g(Lg,"present"),bin=bo&&g(Bn,"present"),both=legend&&bin,nm=both&&g(Mt,"names_match")&&g(Mt,"location_match"),st=both&&g(St,"item_present"),ql=nm&&st&&g(Q,"legend_good")&&g(Q,"binlist_good");
+ var sc=!legend&&!bin?0:!legend?1:!bin?2:3;if(nm&&st){sc=4;if(ql)sc=5}
+ var why=["Neither the Master Legend nor a rack/bin list is available.","A rack/bin list exists but there is no Master Legend to refer to.","Master Legend is available but no list was found at the rack/bin.","Both are available, but the item name/location match or the item\u2019s presence in that bin could not be confirmed.","Both are available, the item matches the Master Legend and is kept in the correct rack/bin, but legibility or upkeep is not yet at the highest level.","Both are available, the item matches and is in its correct rack/bin, and the Master Legend and list are clean, visible and well maintained."][sc];
+ var steps=[["Master Legend available (item with rack and bin numbers)",legend,lo?(legend?"Verified in photo. "+(Lg.entries&&Lg.entries.length?"Entries read: "+Lg.entries.slice(0,4).join("; ")+". ":"")+(Lg.note||""):"Photo supplied does not show a Master Legend. "+(Lg.note||"")):"Declared Not Available by the auditor."],
+ ["List available at the rack / bin",bin,bo?(bin?"Verified in photo. Rack "+(Bn.rack||"?")+", bin "+(Bn.bin||"?")+". "+(Bn.note||""):"Photos supplied do not show a list at the rack/bin. "+(Bn.note||"")):"Declared Not Available by the auditor."],
+ ["Item name and rack/bin number on the list agree with the Master Legend",nm,both?(Mt.note||"Could not be confirmed."):"Needs both the Master Legend and the rack/bin list."],
+ ["Item is actually kept in that rack / bin",st,both?(St.note||"Could not be confirmed."):"Needs both the Master Legend and the rack/bin list."],
+ ["Master Legend and list are clean, visible and well maintained",ql,both?(Q.note||"Could not be confirmed.")+(nm&&st?"":" (counts toward 5 only after criteria 3 and 4 are met)"):"Needs both the Master Legend and the rack/bin list."]];
+ R.s4={lvl:sc,score:r2(sc/5),steps:steps,met:steps.filter(function(s){return s[1]}).length,rule:"Scoring ladder: neither available = 0; rack/bin list only = 1 (assumed); Master Legend only = 2; both available = 3; both available and the item name and rack/bin number match and the item is found in that bin = 4; plus both clean, visible and well maintained = 5. Result: ladder level "+sc+" of 5, so 4S score = "+sc+" / 5 = "+(sc/5).toFixed(2)+" out of 1. "+why}}
+var show3=show;
+show=function(){var s4=R.s4?R.s4.score:0;R.total=r2(R.sub[1].score+R.sub[2].score+R.sub[3].score+s4);show3();
+ $("scores").innerHTML=[1,2,3].map(function(i){var v=R.sub[i].score;return '<div><small>'+SN[i]+'</small><big>'+f2(v)+'</big><small>/ 1 \u00b7 '+lab(v)+'</small></div>'}).join("")+'<div><small>4S Systematize</small><big>'+(R.s4?f2(s4):"\u2026")+'</big><small>/ 1 \u00b7 '+(R.s4?lab(s4):"assessing")+'</small></div><div class="t"><small>Overall (1S to 4S)</small><big>'+f2(R.total)+'</big><small>/ 4 \u00b7 '+lab(R.total,4)+'</small></div>';
+ $("why").innerHTML=$("why").innerHTML.replace("Overall = 1S + 2S + 3S (maximum 3)","Overall = 1S + 2S + 3S + 4S (maximum 4)");
+ if(R.s4)$("why").innerHTML+='<p><b>4S Systematize = '+f2(s4)+' / 1.</b> '+esc(R.s4.rule)+'</p><div class="ov"><table><tr><th>#</th><th>Criterion</th><th>Result</th><th>Evidence</th></tr>'+R.s4.steps.map(function(s,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(s[0])+'</td><td><span class="pill '+(s[1]?"Pass":"Fail")+'">'+(s[1]?"Met":"Not met")+'</span></td><td>'+esc(s[2])+'</td></tr>'}).join("")+'</table></div>'}
+var go3=$("go").onclick;
+$("go").onclick=async function(){
+ if($("legsel").value==="y"&&!S4.leg){$("msg").innerHTML='<span class="err">Add the Master Legend photo, or choose Not Available.</span>';return}
+ if($("binsel").value==="y"&&S4.bin.length<2){$("msg").innerHTML='<span class="err">Add 2 rack / bin photos, or choose Not Available.</span>';return}
+ R=null;$("pdf").disabled=true;$("xls").disabled=true;await go3();
+ if(!R)return;
+ $("go").disabled=true;$("msg").textContent="Checking 4S\u2026";
+ try{var sample=await claude.use("sample");await eval4(sample);show();$("pdf").disabled=false;$("xls").disabled=false;$("msg").textContent=""}
+ catch(x){$("msg").innerHTML='<span class="err">4S could not be assessed ('+esc(x.code||x.message||"error")+'). Please click Assess again.</span>'}
+ $("go").disabled=false};
+$("xls").onclick=function(){var m=meta();var ws=XLSX.utils.aoa_to_sheet([["Date","Who","For Whom","Area Name","1S Score","2S Score","3S Score","4S Score","Overall Score"],[m.date,m.who,m.whom,m.area,R.sub[1].score,R.sub[2].score,R.sub[3].score,R.s4.score,R.total]]);ws["!cols"]=[12,28,24,28,10,10,10,10,14].map(function(w){return{wch:w}});var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"5S Audit");save(fname("xlsx"),new Blob([XLSX.write(wb,{bookType:"xlsx",type:"array"})],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),"Excel")};
+var LAD=[["0","Neither the Master Legend nor a rack/bin list is available"],["1","Rack/bin list only, no Master Legend (assumed level)"],["2","Master Legend available, no list at the rack/bin"],["3","Both the Master Legend and the rack/bin list are available"],["4","Both available; item name and rack/bin number match the Master Legend and the item is found in that rack/bin"],["5","As level 4, and both the Master Legend and the list are clean, visible and well maintained"]];
+function deriv4(){var s=R.s4;return "Criteria met: "+s.met+" of 5. 4S is not an average: the score is the highest level of the 0 to 5 scoring ladder whose conditions are all satisfied. Ladder level reached = "+s.lvl+" of 5, so the 4S score = "+f2(s.score)+" out of 1. "+s.rule.split("Result: ")[1]}
+/* ---- v5: each assessment is appended as one row to a Google Sheet ---- */
+var SH={id:"1WtR6ycWPfhwdqReEvn7_FmbLcGDNE4Q2Mp_0LbGqN2M",tab:"'Raw Data'",server:"Google Sheets"};
+var SH_H=["Date","Who","For Whom","Area Name","1S Score","2S Score","3S Score","4S Score","Overall Score","Report Link"];
+var DR={folder:"1ixVYyhxojY3OGcxKdjRpcL786a_k6FV3",server:"Google Drive"};
+var PDFBLOB=null,NOSAVE=false;
+function mkpdf(){NOSAVE=true;PDFBLOB=null;try{$("pdf").onclick()}finally{NOSAVE=false}return PDFBLOB}
+function b64(buf){var s="",u=new Uint8Array(buf),k=32768;for(var i=0;i<u.length;i+=k)s+=String.fromCharCode.apply(null,u.subarray(i,i+k));return btoa(s)}
+function linkOf(p){if(!p)return"";if(typeof p==="string"){var m=p.match(/https:\/\/(?:drive|docs)\.google\.com\/[^\s"'<>\\]+/);return m?m[0]:""}
+ var u=p.webViewLink||p.alternateLink||p.url||p.link||(p.file&&(p.file.webViewLink||p.file.alternateLink||p.file.url));if(u)return String(u);
+ var id=p.id||p.fileId||(p.file&&p.file.id);return id?"https://drive.google.com/file/d/"+id+"/view":""}
+async function drivePdf(mcp){
+ var bl=mkpdf();if(!bl)throw{code:"pdf_failed",message:"PDF could not be generated"};
+ var name=fname("pdf"),inp={title:name,parentId:DR.folder,contentMimeType:"application/pdf",disableConversionToGoogleType:true},fa=false;
+ try{var lt=await mcp.listTools();fa=!!(lt&&lt.fileArgs)}catch(e){}
+ if(fa)inp.base64Content={$file:{data:bl,name:name,type:"application/pdf"}};
+ else{var buf=await bl.arrayBuffer();if(buf.byteLength>3500000)throw{code:"pdf_too_large",message:"too large"};inp.base64Content=b64(buf)}
+ var res=await mcp.callTool(DR.server,"create_file",inp),l=linkOf(res&&res.payload)||linkOf(res&&res.structuredContent);
+ if(!l&&res&&res.content)res.content.forEach(function(c){if(!l&&c&&c.text)l=linkOf(c.text)});
+ if(!l)throw{code:"no_link",message:"no link returned"};
+ return l}
+function dErr(x){var c=x&&x.code;
+ if(c==="approval_required"||c==="consent_required"||c==="not_in_manifest")return"Permission to use Google Drive was not given.";
+ if(c==="server_not_connected"||c==="selection_required")return"Google Drive is not connected (Customize → Connectors).";
+ if(c==="needs_reauth")return"Google Drive needs to be reconnected (Customize → Connectors).";
+ if(c==="blocked_by_policy")return"Your organisation blocks this Google Drive action.";
+ if(c==="no_link")return"The PDF may be in the 5S Folder, but Drive returned no link, so check the folder.";
+ if(c==="pdf_too_large")return"The PDF is too large to upload from this view; use the PDF download button.";
+ if(c==="pdf_failed")return"The PDF could not be generated.";
+ if(c==="tool_error")return"Google Drive refused the upload ("+esc(((x.message||"")+"").slice(0,120))+"). Check that you have Editor access to the 5S Folder.";
+ if(c==="server_unavailable"||c==="upstream_error")return"Google Drive did not confirm the upload; check the 5S Folder before retrying.";
+ return"The PDF could not be saved to Drive ("+esc(c||"error")+").";}
+async function sheetSave(auto){
+ if(!R||!R.s4)return;var mm=$("dm"),b=$("xls");
+ var mcp=await claude.use("mcp");
+ if(!mcp){mm.innerHTML='<span class="err">Google Sheets / Drive is not available in this view. Open the page in claude.ai and try again.</span>';return}
+ if(R.saved&&!auto&&!confirm("This assessment is already in the sheet. Add it again?"))return;
+ b.disabled=true;var note="";
+ if(!R.link){mm.textContent="Saving the PDF to Google Drive…";try{R.link=await drivePdf(mcp)}catch(x){note=dErr(x)}}
+ mm.textContent="Saving the row to Google Sheet…";
+ var m=meta(),row=[m.date,m.who,m.whom,m.area,R.sub[1].score,R.sub[2].score,R.sub[3].score,R.s4.score,R.total,R.link||""];
+ try{
+  var chk=await mcp.callTool(SH.server,"get_values",{spreadsheetId:SH.id,range:SH.tab+"!A1:J1"},{cache:false}),p=chk&&chk.payload;
+  var hd=(p&&typeof p==="object"&&p.values&&p.values[0])||[],has=!!hd.join("");
+  if(has&&!hd[9])await mcp.callTool(SH.server,"update_values",{spreadsheetId:SH.id,range:SH.tab+"!J1",values:[["Report Link"]]});
+  await mcp.callTool(SH.server,"append_values",{spreadsheetId:SH.id,range:SH.tab+"!A1",values:has?[row]:[SH_H,row]});
+  R.saved=true;mm.innerHTML="Saved to Google Sheet (new row at the bottom)."+(R.link?" PDF saved in the 5S Folder; its link is in the Report Link column.":' <span class="err">'+note+" The row was saved without a link.</span>");b.textContent="✔ Saved. Send again";
+ }catch(x){var c=x&&x.code,t;
+  if(c==="approval_required"||c==="consent_required"||c==="not_in_manifest")t="Permission to use Google Sheets was not given. Click Send to Google Sheet and choose Allow.";
+  else if(c==="server_not_connected"||c==="selection_required")t="Google Sheets is not connected. Add it under Customize → Connectors, then click Send to Google Sheet.";
+  else if(c==="needs_reauth")t="Google Sheets needs to be reconnected under Customize → Connectors.";
+  else if(c==="blocked_by_policy")t="Your organisation blocks this Google Sheets action.";
+  else if(c==="tool_error")t="Google Sheets refused the write: "+esc(((x.message||"")+"").slice(0,160))+". Check that you can edit the sheet.";
+  else if(c==="server_unavailable"||c==="upstream_error")t="Google Sheets did not confirm the save. Open the sheet and check the last row before sending again, to avoid a duplicate.";
+  else t="The row could not be saved ("+esc(c||"error")+").";
+  mm.innerHTML='<span class="err">'+t+(note?" "+note:"")+'</span>'}
+ b.disabled=false}
+$("xls").onclick=function(){sheetSave(false)};
+var go5=$("go").onclick;
+$("go").onclick=async function(){await go5();if(R&&R.s4&&!R.saved)await sheetSave(true)};
+/* ---- v6: never fail silently ---- */
+window.addEventListener("error",function(e){var m=$("msg");if(m)m.innerHTML='<span class="err">Error: '+esc(e.message||"unknown")+'</span>'});
+window.addEventListener("unhandledrejection",function(e){var m=$("msg"),r=e.reason||{};if(m)m.innerHTML='<span class="err">Error: '+esc(r.code||r.message||String(r))+'</span>';$("go").disabled=false});
+var go6=$("go").onclick;
+$("go").onclick=async function(){$("msg").textContent="Starting…";try{await go6()}catch(x){$("msg").innerHTML='<span class="err">Error: '+esc((x&&(x.code||x.message))||"unknown")+'</span>';$("go").disabled=false}};
+initLists();
+</script>
+<script>
+(function(){
+ function g(i){return document.getElementById(i)}
+ var step=1,pages=["s1","s2","s3","s4"],msg=g("msg"),busy=false;
+ function say(t){msg.innerHTML=t?'<span class="err">'+t+'</span>':""}
+ function ok1(){return g("date").value&&g("who").value&&g("whom").value.trim()&&g("area").value.trim()}
+ function photosOk(){return g("th").children.length>=4}
+ function legOk(){return g("legsel").value==="n"||g("legth").children.length>0}
+ function binOk(){return g("binsel").value==="n"||g("binth").children.length>=2}
+ function resShown(){return !g("res").classList.contains("hid")}
+ function sel(i){var e=g(i);return e.options&&e.selectedIndex>=0?e.options[e.selectedIndex].text:""}
+ function esc2(t){return String(t==null?"":t).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+ function review(){
+  var rows=[["Date",g("date").value],["Auditor",sel("who")+(g("wname").value?" \u2013 "+g("wname").value:"")],["Auditee",g("whom").value],["Area",g("area").value+(sel("env")?" ("+sel("env")+")":"")],
+   ["Photos",g("th").children.length+" area photos"],
+   ["Master Legend",g("legsel").value==="n"?"Not Available":(g("legth").children.length?"Photo added":"Missing")],
+   ["Rack / bin list",g("binsel").value==="n"?"Not Available":(g("binth").children.length+" photos")]];
+  g("rv").className="rv";g("rv").innerHTML=rows.map(function(r){return "<b>"+r[0]+"</b><span>"+esc2(r[1])+"</span>"}).join("");
+  g("rvt").innerHTML=[].map.call(g("th").querySelectorAll("img"),function(im){return '<div><img src="'+im.src+'" alt=""></div>'}).join("")
+ }
+ function view(n){
+  step=n;
+  pages.forEach(function(p,i){g(p).classList.toggle("cur",n===i+1)});
+  g("res").style.display=n===5?"":"none";
+  if(n!==5)g("mgr").classList.add("hid");
+  if(n===4)review();
+  g("bk").classList.toggle("hid",n===1);g("bk").textContent=n===5?"Edit":"Back";
+  g("nx").classList.toggle("hid",n>=4);g("go").classList.toggle("hid",n!==4);g("nw").classList.toggle("hid",n!==5);
+  say("");paint();window.scrollTo({top:0,behavior:"smooth"})
+ }
+ function paint(){
+  var d=[!!ok1(),photosOk(),legOk()&&binOk(),resShown(),resShown()];
+  for(var i=1;i<=5;i++){var b=g("st"+i);b.className=i===step?"on":(d[i-1]?"ok":"");var n=g("n"+i);if(n){n.className="n"+(d[i-1]?" done":"");n.textContent=d[i-1]?"\u2713":i}}
+  g("xls").classList.toggle("hid",!(g("dm").querySelector(".err")));
+ }
+ function guard(to){
+  if(to>1&&!ok1()){say("Fill all * fields.");return false}
+  if(to>2&&!photosOk()){say("Add 4 or 5 photos.");return false}
+  if(to>3&&!legOk()){say("Add the Master Legend photo, or choose Not Available.");return false}
+  if(to>3&&!binOk()){say("Add 2 rack / bin photos, or choose Not Available.");return false}
+  return true}
+ g("nx").onclick=function(){if(guard(step+1))view(step+1)};
+ g("bk").onclick=function(){if(busy)return;view(step===5?1:step-1)};
+ g("nw").onclick=function(){if(confirm("Start a new audit? This clears the page."))location.reload()};
+ [1,2,3,4,5].forEach(function(i){g("st"+i).onclick=function(){
+  if(busy)return;
+  if(i===5){if(resShown())view(5);else say("Submit first.");return}
+  if(guard(i))view(i)}});
+ /* Submit: score, auto-save to Sheet + Drive, then show the result */
+ var orig=g("go").onclick;
+ g("go").onclick=async function(){
+  if(!guard(4))return;
+  busy=true;g("bk").disabled=true;g("go").textContent="Submitting\u2026";
+  try{await orig.call(this)}finally{busy=false;g("bk").disabled=false;g("go").textContent="Submit"}
+  if(resShown()){view(5);confetti()}};
+ function confetti(){
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  var c=document.createElement("canvas");c.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50";
+  c.width=innerWidth;c.height=innerHeight;document.body.appendChild(c);var x=c.getContext("2d"),col=["#1f3fe0","#14143c","#e5283a","#12874a","#f2b01e","#6c8cff"],P=[];
+  for(var i=0;i<140;i++)P.push({x:innerWidth/2+(Math.random()-.5)*160,y:innerHeight*.75,vx:(Math.random()-.5)*16,vy:-8-Math.random()*13,w:6+Math.random()*7,h:4+Math.random()*6,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:col[i%col.length]});
+  var t0=performance.now();
+  (function f(t){var e=t-t0;x.clearRect(0,0,c.width,c.height);
+   P.forEach(function(p){p.vy+=.32;p.vx*=.992;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.globalAlpha=Math.max(0,1-e/3200);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});
+   if(e<3200)requestAnimationFrame(f);else c.remove()})(t0)}
+ /* keep results hidden until submit has finished */
+ new MutationObserver(function(){paint()}).observe(g("res"),{attributes:true,attributeFilter:["class"]});
+ new MutationObserver(function(){paint()}).observe(g("dm"),{childList:true,subtree:true,characterData:true});
+ document.addEventListener("input",paint);document.addEventListener("change",paint);document.addEventListener("click",function(){setTimeout(paint,60)});
+ setInterval(paint,800);
+ var c=g("cnt");function fc(){var m=c.textContent.match(/^(\d+)/);if(m&&!/ of 4/.test(c.textContent))c.textContent=m[1]+" of 4\u20135"}new MutationObserver(fc).observe(c,{childList:true});fc();
+ view(1);
+})();
+</script>
+
+</body></html>
