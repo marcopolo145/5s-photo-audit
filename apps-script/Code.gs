@@ -4,8 +4,9 @@
  * Then set Script property SECRET (Project settings > Script properties).
  * The Supabase function calls this with the secret; nobody else can use it.
  */
-var SHEET_ID = '1WtR6ycWPfhwdqReEvn7_FmbLcGDNE4Q2Mp_0LbGqN2M';
-var FOLDER_ID = '1ixVYyhxojY3OGcxKdjRpcL786a_k6FV3';
+// The Sheet and Folder are created once by the 'setup' tool and remembered in Script properties.
+function cfg_(k) { return PropertiesService.getScriptProperties().getProperty(k) || ''; }
+var HEADERS = ['Date','Who','For Whom','Area Name','1S Score','2S Score','3S Score','4S Score','Overall Score','Report Link'];
 
 function out_(o) {
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
@@ -25,6 +26,7 @@ function doPost(e) {
     lock.waitLock(20000);
     var r;
     switch (b.tool) {
+      case 'setup':         r = setup_(); break;
       case 'get_values':    r = getValues_(a); break;
       case 'update_values': r = updateValues_(a); break;
       case 'append_values': r = appendValues_(a); break;
@@ -40,8 +42,8 @@ function doPost(e) {
 }
 
 function ss_(a) {
-  if (a.spreadsheetId !== SHEET_ID) throw new Error('spreadsheet not allowed');
-  return SpreadsheetApp.openById(SHEET_ID);
+  if (!cfg_('SHEET_ID') || a.spreadsheetId !== cfg_('SHEET_ID')) throw new Error('spreadsheet not allowed');
+  return SpreadsheetApp.openById(cfg_('SHEET_ID'));
 }
 
 function getValues_(a) {
@@ -69,9 +71,29 @@ function appendValues_(a) {
 }
 
 function createFile_(a) {
-  if (a.parentId !== FOLDER_ID) throw new Error('folder not allowed');
+  if (!cfg_('FOLDER_ID') || a.parentId !== cfg_('FOLDER_ID')) throw new Error('folder not allowed');
   var bytes = Utilities.base64Decode(a.base64Content);
   var blob = Utilities.newBlob(bytes, a.contentMimeType || 'application/pdf', a.title);
-  var f = DriveApp.getFolderById(FOLDER_ID).createFile(blob);
+  var f = DriveApp.getFolderById(cfg_('FOLDER_ID')).createFile(blob);
   return { id: f.getId(), webViewLink: f.getUrl() };
+}
+
+function setup_() {
+  var p = PropertiesService.getScriptProperties();
+  if (!p.getProperty('SHEET_ID')) {
+    var ss = SpreadsheetApp.create('5S Audit Data');
+    var sh = ss.getSheets()[0];
+    sh.setName('Raw Data');
+    sh.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+    p.setProperty('SHEET_ID', ss.getId());
+  }
+  if (!p.getProperty('FOLDER_ID')) {
+    p.setProperty('FOLDER_ID', DriveApp.createFolder('5S Folder').getId());
+  }
+  var sid = p.getProperty('SHEET_ID'), fid = p.getProperty('FOLDER_ID');
+  return {
+    sheetId: sid, sheetUrl: SpreadsheetApp.openById(sid).getUrl(),
+    folderId: fid, folderUrl: DriveApp.getFolderById(fid).getUrl()
+  };
 }

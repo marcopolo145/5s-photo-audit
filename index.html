@@ -367,9 +367,9 @@ $("xls").onclick=function(){var m=meta();var ws=XLSX.utils.aoa_to_sheet([["Date"
 var LAD=[["0","Neither the Master Legend nor a rack/bin list is available"],["1","Rack/bin list only, no Master Legend (assumed level)"],["2","Master Legend available, no list at the rack/bin"],["3","Both the Master Legend and the rack/bin list are available"],["4","Both available; item name and rack/bin number match the Master Legend and the item is found in that rack/bin"],["5","As level 4, and both the Master Legend and the list are clean, visible and well maintained"]];
 function deriv4(){var s=R.s4;return "Criteria met: "+s.met+" of 5. 4S is not an average: the score is the highest level of the 0 to 5 scoring ladder whose conditions are all satisfied. Ladder level reached = "+s.lvl+" of 5, so the 4S score = "+f2(s.score)+" out of 1. "+s.rule.split("Result: ")[1]}
 /* ---- v5: each assessment is appended as one row to a Google Sheet ---- */
-var SH={id:"1WtR6ycWPfhwdqReEvn7_FmbLcGDNE4Q2Mp_0LbGqN2M",tab:"'Raw Data'",server:"Google Sheets"};
+var SH={id:"1bnnLlkJMGlmJI_7VxHf7lC9LOWnBaUVQEzBFhrEzU3s",tab:"'Raw Data'",server:"Google Sheets"};
 var SH_H=["Date","Who","For Whom","Area Name","1S Score","2S Score","3S Score","4S Score","Overall Score","Report Link"];
-var DR={folder:"1ixVYyhxojY3OGcxKdjRpcL786a_k6FV3",server:"Google Drive"};
+var DR={folder:"1ReYdcM5XIfjvguYoWIWuY4IWtXXTzHP8",server:"Google Drive"};
 var PDFBLOB=null,NOSAVE=false;
 function mkpdf(){NOSAVE=true;PDFBLOB=null;try{$("pdf").onclick()}finally{NOSAVE=false}return PDFBLOB}
 function b64(buf){var s="",u=new Uint8Array(buf),k=32768;for(var i=0;i<u.length;i+=k)s+=String.fromCharCode.apply(null,u.subarray(i,i+k));return btoa(s)}
