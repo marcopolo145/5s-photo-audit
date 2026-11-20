@@ -19,7 +19,7 @@ function doPost(e) {
   var lock = LockService.getScriptLock();
   try {
     var b = JSON.parse(e.postData.contents);
-    var secret = PropertiesService.getScriptProperties().getProperty('SECRET');
+    var secret = (typeof SECRET !== 'undefined' && SECRET) || PropertiesService.getScriptProperties().getProperty('SECRET');
     if (!secret || b.secret !== secret) return out_({ ok: false, error: 'forbidden' });
     var a = b.args || {};
     lock.waitLock(20000);

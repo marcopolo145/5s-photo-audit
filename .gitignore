@@ -4,3 +4,6 @@
 supabase/.temp/
 supabase/.branches/
 node_modules/
+apps-script/Secret.gs
+.env.script_secret
+.clasp.json
