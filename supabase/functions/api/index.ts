@@ -57,7 +57,7 @@ async function ai(prompt: string, images: string[]) {
     if (!r.ok) throw { code: "ai_error", message: j?.error?.message || r.statusText };
     out = (j.content || []).map((c: { text?: string }) => c.text || "").join("");
   } else if (gk) {
-    const model = Deno.env.get("GEMINI_MODEL") || "gemini-2.5-flash";
+    const model = Deno.env.get("GEMINI_MODEL") || "gemini-3.8-flash";
     const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
       method: "POST",
       headers: { "x-goog-api-key": gk, "content-type": "application/json" },
