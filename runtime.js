@@ -44,25 +44,31 @@
     var head = p.slice(0, a), lib = p.slice(p.indexOf(":", a) + 1, z);
     var i1 = lib.indexOf(MARK[1]), i2 = lib.indexOf(MARK[2]), i3 = lib.indexOf(MARK[3]);
     var seg = ["", lib.slice(i1, i2), lib.slice(i2, i3), lib.slice(i3)];
-    var jobs = [1, 2, 3].map(function (s) {
-      var q = head + "FOCUS: this request covers ONLY " + SNAME[s] + ". Give the other S no entries.\n" +
-        "INDICATOR LIBRARY (only " + SNAME[s] + "; exactly one entry each):" + seg[s] + "\n" +
-        'Return ONLY JSON: {"why":"1-2 short sentences on what drove the points","evidence_level":n,"evidence_note":"...","summary":"one short sentence about this S","items":[{"id":"indicator ID","p":0-10 or null,"ph":photo number or 0,"o":"what you see, max 8 words"}],"actions":[{"s":' + s + ',"action":"specific corrective action","priority":"High|Medium|Low","minutes":n,"people":n,"ref":"indicator ID(s)"}],"photo_feedback":["retake or missing-view advice"]}\n' +
-        "Give 2-5 actions for the lowest-scoring indicators of this S, with realistic minutes for one person and the number of people.";
-      return api({ action: "ai", prompt: q, images: im }).then(function (r) { return r.json || {}; });
+    var jobs = [];
+    [1, 2, 3].forEach(function (s) {
+      var lines = seg[s].split("\n").filter(function (x) { return x.trim(); }), title = lines.shift();
+      for (var k = 0, c = 0; k < lines.length; k += 20, c++) {
+        var chunk = lines.slice(k, k + 20);
+        jobs.push({ s: s, first: c === 0, prompt: head + "FOCUS: this request covers ONLY the " + SNAME[s] + " indicators listed here. Give no other entries.\n" +
+          "INDICATOR LIBRARY (only these; exactly one entry each):\n" + title + "\n" + chunk.join("\n") + "\n" +
+          'Return ONLY JSON: {"why":"1-2 short sentences on what drove the points","evidence_level":n,"evidence_note":"...","summary":"one short sentence about this S","items":[{"id":"indicator ID","p":0-10 or null,"ph":photo number or 0,"o":"what you see, max 8 words"}],"actions":[{"s":' + s + ',"action":"specific corrective action","priority":"High|Medium|Low","minutes":n,"people":n,"ref":"indicator ID(s)"}],"photo_feedback":["retake or missing-view advice"]}\n' +
+          "Give 1-3 actions for the lowest-scoring indicators here, with realistic minutes for one person and the number of people." });
+      }
     });
-    var R = await Promise.all(jobs), out = { items: [], actions: [], photo_feedback: [], evidence_level: 3, evidence_note: "", summary: "" };
-    R.forEach(function (r, i) {
-      out["s" + (i + 1)] = { why: r.why || "" };
+    var res = await api({ action: "ai_multi", prompts: jobs.map(function (j) { return j.prompt; }), images: im });
+    var out = { items: [], actions: [], photo_feedback: [], evidence_level: 3, evidence_note: "", summary: "", s1: { why: "" }, s2: { why: "" }, s3: { why: "" } };
+    (res.json || []).forEach(function (r, i) {
+      var j = jobs[i]; r = r || {};
+      if (r.why) out["s" + j.s].why += (out["s" + j.s].why ? " " : "") + r.why;
       out.items = out.items.concat(r.items || []);
       out.actions = out.actions.concat(r.actions || []);
       (r.photo_feedback || []).forEach(function (f) { if (out.photo_feedback.indexOf(f) < 0) out.photo_feedback.push(f); });
       if (r.evidence_level && r.evidence_level < out.evidence_level) out.evidence_level = r.evidence_level;
       if (!out.evidence_note && r.evidence_note) out.evidence_note = r.evidence_note;
-      if (r.summary) out.summary += (out.summary ? " " : "") + r.summary;
+      if (j.first && r.summary) out.summary += (out.summary ? " " : "") + r.summary;
     });
     var rank = { High: 0, Medium: 1, Low: 2 };
-    out.actions.sort(function (x, y) { return (rank[x.priority] || 1) - (rank[y.priority] || 1); });
+    out.actions.sort(function (x, y) { return (rank[x.priority] == null ? 1 : rank[x.priority]) - (rank[y.priority] == null ? 1 : rank[y.priority]); });
     out.actions = out.actions.slice(0, 12);
     out.total_minutes = Math.round(out.actions.reduce(function (t, x) { return t + (+x.minutes || 0) / Math.max(1, +x.people || 1); }, 0));
     return out;

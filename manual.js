@@ -200,14 +200,46 @@
     };
   });
 
-  /* Submit: score, save to Sheet and Drive, then show the result */
-  var orig = g("go").onclick;
+  /* Submit: the result opens as soon as scoring is done; saving to Sheet and Drive continues with a visible banner. */
+  var orig = g("go").onclick, shown = false, t0 = 0, tick = null;
+  function bar(cls, html) { var s = g("savebar"); s.className = "savebar" + (cls ? " " + cls : ""); s.innerHTML = html; }
+  function startProg() {
+    t0 = Date.now(); g("prog").classList.remove("hid");
+    g("pl").innerHTML = ["Issuing the document number", "Scoring the photos"].map(function (t, i) { return '<li id="pl' + i + '" class="' + (i === 1 ? "on" : "") + '">' + t + "</li>"; }).join("");
+    tick = setInterval(function () {
+      var s = (Date.now() - t0) / 1000, p = 92 * (1 - Math.exp(-s / 7));
+      g("pfill").style.width = Math.max(3, p) + "%";
+      g("pst").textContent = (s > 30 ? "Taking a little longer\u2026 " : "Scoring your photos\u2026 ") + Math.round(s) + " s. Please keep this page open.";
+      if (window.__docNo) { g("pl0").className = "done"; }
+    }, 400);
+  }
+  function stopProg() { clearInterval(tick); g("prog").classList.add("hid"); g("pfill").style.width = "3%"; }
+  function mirrorSave() {
+    if (!busy && !shown) return;
+    var t = g("dm").textContent || "", bad = !!g("dm").querySelector(".err");
+    if (bad) bar("bad", t);
+    else if (/Saved to the Google Sheet/.test(t)) bar("ok", "\u2713 Submitted. " + g("dm").innerHTML);
+    else bar("", "Saving to the Google Sheet and the 5S Folder\u2026 please keep this page open. " + (window.__docNo ? "Document No: " + esc(window.__docNo) + "." : ""));
+  }
+  function early() {
+    if (busy && resShown() && !shown) {
+      shown = true; stopProg(); view(KEYS.length - 1); mirrorSave();
+    }
+  }
+  window.addEventListener("beforeunload", function (e) { if (busy) { e.preventDefault(); e.returnValue = ""; return ""; } });
   g("go").onclick = async function () {
     if (!guard(KEYS.indexOf("s4"))) return;
     if (window.prefetchDoc) window.prefetchDoc();
-    busy = true; g("bk").disabled = true; g("go").textContent = "Submitting…";
-    try { await orig.call(this); } finally { busy = false; g("bk").disabled = false; g("go").textContent = "Submit"; }
-    if (resShown()) { view(KEYS.length - 1); confetti(); }
+    busy = true; shown = false; g("bk").disabled = true; g("nw").disabled = true; g("go").disabled = true; g("go").textContent = "Submitting\u2026";
+    startProg();
+    try { await orig.call(this); } finally {
+      busy = false; g("bk").disabled = false; g("nw").disabled = false; g("go").disabled = false; g("go").textContent = "Submit"; stopProg();
+    }
+    if (resShown()) {
+      if (!shown) { shown = true; view(KEYS.length - 1); }
+      mirrorSave();
+      if (/Saved to the Google Sheet/.test(g("dm").textContent)) confetti();
+    }
   };
   function confetti() {
     if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -224,8 +256,8 @@
     })(t0);
   }
 
-  new MutationObserver(paint).observe(g("res"), { attributes: true, attributeFilter: ["class"] });
-  new MutationObserver(paint).observe(g("dm"), { childList: true, subtree: true, characterData: true });
+  new MutationObserver(function () { paint(); early(); }).observe(g("res"), { attributes: true, attributeFilter: ["class"] });
+  new MutationObserver(function () { paint(); mirrorSave(); }).observe(g("dm"), { childList: true, subtree: true, characterData: true });
   document.addEventListener("input", paint); document.addEventListener("change", paint);
   document.addEventListener("click", function () { setTimeout(paint, 60); });
   setInterval(paint, 800);
