@@ -75,6 +75,12 @@ details{margin-top:14px}summary{cursor:pointer;color:var(--ac);font-weight:600;f
 .savebar{border-radius:12px;padding:10px 14px;margin:14px 0 0;font-size:14px;font-weight:600;background:#fff6e0;color:#8a5a00;border:1px solid #f0d9a0}.savebar.ok{background:#eefaf3;color:#0b6a38;border-color:#bfe5cf}.savebar.bad{background:#fdeeee;color:#b3202e;border-color:#f3c3c7}.savebar:empty{display:none}
 .pbar{height:10px;border-radius:99px;background:#e6eafb;overflow:hidden;margin-top:14px}.pbar i{display:block;height:100%;width:3%;background:linear-gradient(90deg,#1f3fe0,#6c8cff);border-radius:99px;transition:width .5s ease}
 .pst{margin-top:10px;font-weight:700}.pl{list-style:none;margin:8px 0 0;padding:0;color:var(--mut);font-size:14px}.pl li{padding:3px 0}.pl li:before{content:"\25CB  "}.pl li.on{color:var(--ac);font-weight:600}.pl li.on:before{content:"\25D4  "}.pl li.done{color:var(--ok)}.pl li.done:before{content:"\2713  "}
+.pb{display:flex;gap:10px;margin-top:14px}.pb button{flex:1;min-height:54px;font-size:16px}
+.qb{border:1px solid var(--bd);border-radius:14px;padding:14px;margin-top:12px}.qt{font-weight:700;font-size:16px}.qb .note{margin:4px 0 0}
+.yn{display:flex;gap:10px;margin-top:12px}.yn button{flex:1;min-height:54px;font-size:16px}.yn button.sel{background:var(--ac)!important;color:#fff!important;border-color:var(--ac)!important}
+.act .in{flex-wrap:wrap;gap:10px}.act #msg{order:-1;flex:1 1 100%;text-align:center}.act #msg:empty{display:none}
+.act button{min-height:54px;font-size:16px}.act #bk{flex:0 0 32%}.act #nx,.act #go{flex:1}.act #nw{flex:1}
+@media(max-width:560px){.act #msg{display:block}.act #msg:empty{display:none}.act button{width:auto}}
 .pg{display:none}.pg.cur{display:block}
 .act .in{justify-content:space-between}.act #msg{flex:1;text-align:center}
 .act button{min-width:110px}
@@ -104,9 +110,9 @@ details{margin-top:14px}summary{cursor:pointer;color:var(--ac);font-weight:600;f
 <div class="c hid" id="mgr"></div><datalist id="dl_aud"></datalist><datalist id="dl_auditee"></datalist><datalist id="dl_area"></datalist>
 
 <div class="c pg" id="s2"><h2><span class="n" id="n2">2</span>Photos <span class="pill2" id="cnt" style="margin-left:auto"></span></h2><p class="s" id="gtxt"></p>
-<details open><summary>Photo guide</summary><div class="shots" id="guide"></div>
+<details><summary>Photo guide: what to photograph</summary><div class="shots" id="guide"></div>
 <p class="note" style="margin-top:10px">Good light. No flash. Keep labels readable. Hide private data.</p></details>
-<div class="drop"><b>Add 4 or 5 photos</b><span class="note">Use camera or gallery</span><div style="margin-top:12px"><input type="file" id="file" accept="image/*" multiple class="hid"><button id="pick">+ Add photos</button></div></div>
+<div class="drop"><b>Add 4 or 5 photos</b><span class="note">Take a photo or choose from your gallery</span><div class="pb"><input type="file" id="file" accept="image/*" multiple class="hid"><input type="file" id="cam" accept="image/*" capture="environment" class="hid"><button id="pickcam" type="button">Take photo</button><button id="pick" type="button" class="o">From gallery</button></div></div>
 <div class="th" id="th"></div></div>
 
 <div class="c pg" id="sr"><h2><span class="n">3</span>Rate the Area <span class="pill2" id="rcnt" style="margin-left:auto"></span></h2>
@@ -115,17 +121,21 @@ details{margin-top:14px}summary{cursor:pointer;color:var(--ac);font-weight:600;f
 <div class="tabs" id="rtabs"></div><div id="rlist"></div>
 <div style="margin-top:12px"><button type="button" class="o" id="rall">Mark the rest of this tab Good</button></div>
 <div style="margin-top:14px"><label>Note (optional)</label><textarea id="rnote" rows="2"></textarea></div></div>
-<div class="c pg" id="s3"><h2><span class="n" id="n3">3</span>4S check</h2>
-<p class="s"><b>A.</b> Photo of the Master Legend (office).<br><b>B.</b> Go to one rack / bin. Take 2 photos: the list and the bin.<br>Not there? Choose <b>Not Available</b>.</p>
-<div class="q"><div><div class="t">A &middot; Master Legend</div><select id="legsel"><option value="y">Yes, I will take photo</option><option value="n">Not Available</option></select><div id="legbox" style="margin-top:10px"><button class="o" id="legbtn">+ Take photo</button><input type="file" id="legf" accept="image/*" class="hid"><div class="th" id="legth"></div></div></div>
-<div><div class="t">B &middot; Rack / bin list</div><select id="binsel"><option value="y">Yes, I will take photo</option><option value="n">Not Available</option></select><div id="binbox" style="margin-top:10px"><button class="o" id="binbtn">+ Take 2 photos</button> <span class="note" id="bcnt"></span><input type="file" id="binf" accept="image/*" multiple class="hid"><div class="th" id="binth"></div></div></div></div>
+<div class="c pg" id="s3"><h2><span class="n">4</span>Master Legend and Rack List</h2>
+<p class="s">Two quick questions about how items are organised.</p>
+<div class="qb"><div class="qt">1. Do you have a Master Legend?</div><p class="note">A master document that lists each item with its rack and bin number. Usually kept in the office.</p>
+<div class="yn"><button type="button" data-t="legsel" data-v="y">Yes, I have it</button><button type="button" data-t="legsel" data-v="n" class="o">No</button></div>
+<select id="legsel" class="hid"><option value="">Choose\u2026</option><option value="y">Yes</option><option value="n">Not Available</option></select>
+<div id="legbox" class="hid"><p class="note" style="margin-top:12px">Photograph the whole Master Legend. Keep the text readable.</p><input type="file" id="legf" accept="image/*" class="hid"><input type="file" id="legc" accept="image/*" capture="environment" class="hid"><div class="pb"><button type="button" id="legcam">Take photo</button><button type="button" id="legbtn" class="o">From gallery</button></div><div class="th" id="legth"></div></div></div>
+<div class="qb"><div class="qt">2. Is a list stuck at the rack or bin?</div><p class="note">Go to one rack or bin from the Master Legend. Look for the list or label on it.</p>
+<div class="yn"><button type="button" data-t="binsel" data-v="y">Yes, there is</button><button type="button" data-t="binsel" data-v="n" class="o">No</button></div>
+<select id="binsel" class="hid"><option value="">Choose\u2026</option><option value="y">Yes</option><option value="n">Not Available</option></select>
+<div id="binbox" class="hid"><p class="note" style="margin-top:12px">Take 2 photos: the list, and the bin with the item. <span id="bcnt"></span></p><input type="file" id="binf" accept="image/*" multiple class="hid"><input type="file" id="binc" accept="image/*" capture="environment" class="hid"><div class="pb"><button type="button" id="bincam">Take photo</button><button type="button" id="binbtn" class="o">From gallery</button></div><div class="th" id="binth"></div></div></div>
 <div id="s4q" class="hid" style="margin-top:14px"><div class="t" style="font-weight:700;margin-bottom:8px">Check at the rack / bin</div><div class="qa">
-<label>Do the item name and rack / bin number on the list match the Master Legend?</label><select id="q4m"><option value="">Choose…</option><option value="y">Yes</option><option value="n">No</option></select>
-<label>Is the item really kept in that rack / bin?</label><select id="q4s"><option value="">Choose…</option><option value="y">Yes</option><option value="n">No</option></select>
-<label>Are the legend and the list clean, easy to see and well kept?</label><select id="q4q"><option value="">Choose…</option><option value="y">Yes</option><option value="n">No</option></select></div></div>
-<details><summary>Item checked (optional)</summary><div class="g" style="margin-top:12px"><div><label>Item name</label><input id="s4item"></div><div><label>Rack no.</label><input id="s4rack"></div><div><label>Bin no.</label><input id="s4bin"></div></div></details>
-<p class="note" style="margin-top:12px">Keep the text clear and readable.</p></div>
-
+<label>Do the item name and rack / bin number on the list match the Master Legend?</label><select id="q4m"><option value="">Choose\u2026</option><option value="y">Yes</option><option value="n">No</option></select>
+<label>Is the item really kept in that rack / bin?</label><select id="q4s"><option value="">Choose\u2026</option><option value="y">Yes</option><option value="n">No</option></select>
+<label>Are the legend and the list clean, easy to see and well kept?</label><select id="q4q"><option value="">Choose\u2026</option><option value="y">Yes</option><option value="n">No</option></select></div></div>
+<details><summary>Item checked (optional)</summary><div class="g" style="margin-top:12px"><div><label>Item name</label><input id="s4item"></div><div><label>Rack no.</label><input id="s4rack"></div><div><label>Bin no.</label><input id="s4bin"></div></div></details></div>
 <div class="c pg" id="s4"><h2><span class="n" id="n4">4</span>Check and Submit</h2><p class="s">Review. Then press Submit.</p><div id="rv"></div><div id="prog" class="hid"><div class="pbar"><i id="pfill"></i></div><div id="pst" class="pst"></div><ul class="pl" id="pl"></ul></div><div class="th" id="rvt"></div><p class="note" style="margin-top:12px">On Submit: a document number is issued, the photos are scored, the PDF goes to the 5S Folder and the row goes to the Google Sheet.</p></div>
 <div id="res" class="hid"><div id="savebar" class="savebar"></div>
 <div class="c"><h2>Your Score</h2><p class="s">Each S is out of 1. Total is out of 4.</p><div class="sc" id="scores"></div><p id="sum" style="margin-top:14px"></p><p class="note" id="evid"></p></div>
@@ -322,6 +332,7 @@ $("pdf").onclick=function(){
  var sw=[34,28,26,26,30,36];row(["S","Indicators scored","Total points","Average /10","Score","Level"],sw,1,1);
  [1,2,3].forEach(function(s){var b=R.sub[s];row([SN[s],b.n+" of "+b.tot,b.sum,f2(b.avg),f2(b.score)+" / 1",lab(b.score)],sw,0,0)});row(["4S Systematize",R.s4.met+" of 5 criteria met","-","-",f2(R.s4.score)+" / 1",lab(R.s4.score)],sw,0,0);row(["OVERALL","","","",f2(R.total)+" / 4",lab(R.total,4)],sw,1,2);y+=3;
  T(R.summary,10);T("Photo evidence level "+R.evidence_level+"/3 (separate from the score). "+(R.evidence_note||""),9,0,[100,110,120]);
+ T("Scoring record: "+(R.ai_model?"AI model "+R.ai_model+", rubric v1.0, temperature 0, fixed seed. ":"")+(R.photo_hash?"Photo fingerprint (SHA-256): "+R.photo_hash:""),7.5,0,[100,110,120]);
  y+=1;T("Actions required",12,1);var qa=[7,8,110,19,36];row(["#","S","Action to take","Priority","Time"],qa,1,1);(R.actions||[]).forEach(function(a,i){row([i+1,a.s+"S",a.action+(a.ref?" ["+a.ref+"]":""),a.priority,mins(a.minutes)+((a.people||1)>1?" x "+a.people+" people":"")],qa)});if(!(R.actions||[]).length)T("No action needed.",9.5);T("Total time to close all actions: "+mins(R.total_minutes||0)+". The action plan with owner and target date is on the last page.",9,0,[100,110,120]);
  y+=1;T("How the score is derived",12,1);
  T("1. Every indicator in the 5S indicator library for this area type is judged from the photographs and given points from 0 to 10: 0-3 = poor / not established, 4-7 = partially established, 8-10 = visibly established.\n2. Indicators that cannot be seen or do not apply are marked Not visible and excluded, so nothing outside the camera view is counted as a failure.\n3. Each scored indicator carries an equal weight: 1 mark divided by the number of scored indicators in that S. Marks earned = points / 10 x weight.\n4. S score (out of 1) = sum of marks earned = average points / 10 x 1. Overall (out of 4) = 1S + 2S + 3S + 4S (4S is scored from the Master Legend and rack/bin list, see below). Level: below 50% poor, 50-82% partially established, 83% and above visibly established.\n5. 4S Systematize is not averaged: it is scored on a fixed ladder (0 to 5) from the Master Legend and the rack/bin list, and the ladder level reached (0 to 5) divided by 5 is the 4S score out of 1 (see the 4S section).",9,0,[60,70,80]);
@@ -345,7 +356,7 @@ $("pdf").onclick=function(){
 var S4={leg:null,bin:[]};
 function legOn(){return $("legsel").value==="y"&&S4.leg}
 function binOn(){return $("binsel").value==="y"&&S4.bin.length>0}
-function d4(){$("legbox").classList.toggle("hid",$("legsel").value==="n");$("binbox").classList.toggle("hid",$("binsel").value==="n");
+function d4(){$("legbox").classList.toggle("hid",$("legsel").value!=="y");$("binbox").classList.toggle("hid",$("binsel").value!=="y");
  $("legth").innerHTML=S4.leg?'<div><img src="'+S4.leg.url+'" alt="Master Legend"><b>L</b><i data-k="l">\u2715</i></div>':"";
  $("binth").innerHTML=S4.bin.map(function(p,i){return '<div><img src="'+p.url+'" alt="Rack or bin photo"><b>'+(i+1)+'</b><i data-k="b" data-i="'+i+'">\u2715</i></div>'}).join("");$("bcnt").textContent=S4.bin.length+" / 2 added";
  [].forEach.call(document.querySelectorAll("#legth i,#binth i"),function(x){x.onclick=function(){if(x.dataset.k==="l")S4.leg=null;else S4.bin.splice(+x.dataset.i,1);d4()}})}

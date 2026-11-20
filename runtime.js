@@ -67,6 +67,7 @@
       if (!out.evidence_note && r.evidence_note) out.evidence_note = r.evidence_note;
       if (j.first && r.summary) out.summary += (out.summary ? " " : "") + r.summary;
     });
+    out.ai_model = res.model || ""; out.photo_hash = res.photo_hash || "";
     var rank = { High: 0, Medium: 1, Low: 2 };
     out.actions.sort(function (x, y) { return (rank[x.priority] == null ? 1 : rank[x.priority]) - (rank[y.priority] == null ? 1 : rank[y.priority]); });
     out.actions = out.actions.slice(0, 12);

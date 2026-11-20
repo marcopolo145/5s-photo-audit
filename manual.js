@@ -6,7 +6,7 @@
   var MAN = !!C.MANUAL_SCORING;
   function g(i) { return document.getElementById(i); }
   var KEYS = MAN ? ["s1", "s2", "sr", "s3", "s4", "res"] : ["s1", "s2", "s3", "s4", "res"];
-  var LBL = { s1: "Details", s2: "Photos", sr: "Rate", s3: "4S", s4: "Submit", res: "Result" };
+  var LBL = { s1: "Details", s2: "Photos", sr: "Rate", s3: "Legend", s4: "Submit", res: "Result" };
   var PTS = [["na", "N/A", null], ["poor", "Poor", 2], ["fair", "Fair", 5], ["good", "Good", 8], ["great", "Great", 10]];
   var VERB = { 1: "Remove or clear", 2: "Set a fixed place or label for", 3: "Clean and keep clean" };
   var MIN = { 1: [30, 15], 2: [45, 20], 3: [30, 15] }; /* minutes for one person: [Poor, Fair] */
@@ -19,8 +19,8 @@
   /* ---------- checks ---------- */
   function ok1() { return g("date").value && g("who").value && g("whom").value.trim() && g("area").value.trim(); }
   function photosOk() { return g("th").children.length >= 4; }
-  function legOk() { return g("legsel").value === "n" || g("legth").children.length > 0; }
-  function binOk() { return g("binsel").value === "n" || g("binth").children.length >= 2; }
+  function legOk() { return !!g("legsel").value && (g("legsel").value === "n" || g("legth").children.length > 0); }
+  function binOk() { return !!g("binsel").value && (g("binsel").value === "n" || g("binth").children.length >= 2); }
   function bothAvail() { return g("legsel").value === "y" && g("binsel").value === "y"; }
   function qOk() { return !MAN || !bothAvail() || (g("q4m").value && g("q4s").value && g("q4q").value); }
   function left() { return rows().filter(function (x) { return !RATE[x.id]; }).length; }
@@ -135,7 +135,7 @@
       var f = rows().filter(function (x) { return !RATE[x.id]; })[0]; if (f) rtab = f.s;
       return "Rate all points. " + left() + " left.";
     },
-    s3: function () { return !legOk() ? "Add the Master Legend photo, or choose Not Available." : !binOk() ? "Add 2 rack / bin photos, or choose Not Available." : "Answer the 3 questions."; }
+    s3: function () { return !g("legsel").value ? "Answer question 1." : !legOk() ? "Add the Master Legend photo." : !g("binsel").value ? "Answer question 2." : !binOk() ? "Add 2 photos at the rack or bin." : "Answer the 3 questions."; }
   };
   function okKey(k) {
     switch (k) {
@@ -264,5 +264,18 @@
   var cn = g("cnt");
   function fc() { var m = cn.textContent.match(/^(\d+)/); if (m && !/ of 4/.test(cn.textContent)) cn.textContent = m[1] + " of 4–5"; }
   new MutationObserver(fc).observe(cn, { childList: true }); fc();
+  /* camera + gallery buttons, and the Yes / No questions */
+  function wireCam(btn, input, gallery) {
+    g(btn).onclick = function () { g(input).click(); };
+    g(input).onchange = function (e) { var h = g(gallery).onchange; if (h) return h.call(this, e); };
+  }
+  wireCam("pickcam", "cam", "file"); wireCam("legcam", "legc", "legf"); wireCam("bincam", "binc", "binf");
+  [].forEach.call(document.querySelectorAll(".yn button"), function (b) {
+    b.onclick = function () {
+      var sl = g(b.dataset.t); sl.value = b.dataset.v; sl.dispatchEvent(new Event("change"));
+      [].forEach.call(b.parentNode.children, function (x) { x.classList.toggle("sel", x === b); });
+      d4q(); paint();
+    };
+  });
   view(0);
 })();
